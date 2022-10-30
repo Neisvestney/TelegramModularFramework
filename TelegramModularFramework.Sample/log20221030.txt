@@ -1,0 +1,131 @@
+2022-10-30 18:13:17.556 +03:00 [INF] Starting host
+2022-10-30 18:13:19.160 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:13:38.001 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:13:57.346 +03:00 [INF] Starting host
+2022-10-30 18:13:58.398 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:14:01.775 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:14:19.971 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:15:09.235 +03:00 [INF] Starting host
+2022-10-30 18:15:10.288 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:15:10.462 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:15:16.863 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:15:28.384 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:18:16.780 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:20:30.618 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:20:33.443 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:46:18.971 +03:00 [INF] Starting host
+2022-10-30 18:46:20.262 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:46:32.854 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:46:41.380 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:47:11.230 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:53:34.539 +03:00 [INF] Starting host
+2022-10-30 18:53:35.616 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:53:35.897 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:53:44.377 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:54:50.779 +03:00 [INF] Starting host
+2022-10-30 18:54:51.989 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:54:59.833 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:56:04.812 +03:00 [INF] Starting host
+2022-10-30 18:56:06.360 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:56:06.585 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 18:58:35.518 +03:00 [INF] Starting host
+2022-10-30 18:58:36.975 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 18:58:37.258 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:03:46.339 +03:00 [INF] Starting host
+2022-10-30 19:03:48.023 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:03:48.308 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:06:05.368 +03:00 [INF] Starting host
+2022-10-30 19:06:06.461 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:06:06.636 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:07:42.375 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:07:57.448 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:08:08.858 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:09:02.914 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:11:31.560 +03:00 [INF] Starting host
+2022-10-30 19:11:32.789 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:11:33.021 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:11:52.695 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:12:08.763 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:14:12.423 +03:00 [INF] Starting host
+2022-10-30 19:14:13.943 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:14:14.182 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:14:18.744 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:17:02.388 +03:00 [INF] Starting host
+2022-10-30 19:17:03.774 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:17:11.534 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:17:20.198 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:22:40.798 +03:00 [INF] Starting host
+2022-10-30 19:22:42.340 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:22:42.536 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:23:16.564 +03:00 [INF] Starting host
+2022-10-30 19:23:18.008 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:23:18.243 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:28:22.210 +03:00 [INF] Starting host
+2022-10-30 19:28:23.579 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:28:23.802 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:28:35.601 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:29:05.553 +03:00 [INF] Starting host
+2022-10-30 19:29:06.760 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:29:30.324 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:30:24.014 +03:00 [INF] Starting host
+2022-10-30 19:30:25.769 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:30:26.003 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:30:38.066 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:42:55.329 +03:00 [INF] Starting host
+2022-10-30 19:42:56.635 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 19:42:59.279 +03:00 [DBG] Executing test2 from SampleModule
+2022-10-30 19:43:04.224 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 19:43:21.542 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 21:53:27.635 +03:00 [INF] Starting host
+2022-10-30 21:53:28.489 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 21:53:35.034 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 21:58:32.171 +03:00 [INF] Starting host
+2022-10-30 21:58:33.218 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 21:58:33.481 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 21:58:34.125 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 21:58:38.670 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:15:01.118 +03:00 [INF] Starting host
+2022-10-30 22:15:02.146 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 22:15:12.894 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:15:17.240 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:15:32.140 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:15:36.977 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:15:41.222 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:15:56.542 +03:00 [INF] Starting host
+2022-10-30 22:15:58.096 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 22:15:58.468 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:17:00.233 +03:00 [INF] Starting host
+2022-10-30 22:17:01.735 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 22:17:02.006 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:19:12.333 +03:00 [INF] Starting host
+2022-10-30 22:19:13.830 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 22:19:14.049 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:19:14.315 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:19:15.284 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:19:20.139 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:19:24.350 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 22:19:27.375 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:17:13.459 +03:00 [INF] Starting host
+2022-10-30 23:17:15.605 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 23:17:15.906 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:17:44.411 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:17:48.088 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:17:54.178 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:18:24.680 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:25:54.718 +03:00 [INF] Starting host
+2022-10-30 23:25:56.725 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 23:26:07.321 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:26:11.558 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:26:16.166 +03:00 [DBG] Executing test from SampleModule
+2022-10-30 23:27:12.178 +03:00 [DBG] Executing info from SampleModule
+2022-10-30 23:27:12.369 +03:00 [ERR] Exception during executing info from SampleModule
+System.ArgumentException: Value does not fall within the expected range.
+   at TelegramModularFramework.Sample.SampleModule.Info()
+   at TelegramModularFramework.Services.TelegramModulesService.InvokeCommand(CommandInfo commandInfo, BaseTelegramModule module, IServiceProvider scoped, String[] args) in D:\Programming\Cs\TelegramModularFramework\TelegramModularFramework\Services\TelegramModulesService.cs:line 146
+   at TelegramModularFramework.Services.TelegramModulesService.HandleCommand(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken) in D:\Programming\Cs\TelegramModularFramework\TelegramModularFramework\Services\TelegramModulesService.cs:line 74
+2022-10-30 23:29:28.402 +03:00 [INF] Starting host
+2022-10-30 23:29:30.479 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 23:29:30.791 +03:00 [DBG] Executing info from SampleModule
+2022-10-30 23:30:39.173 +03:00 [INF] Starting host
+2022-10-30 23:30:41.160 +03:00 [INF] Connected as weather_and_events_bot with id 5448859054
+2022-10-30 23:30:58.386 +03:00 [DBG] Executing testexception from SampleModule
