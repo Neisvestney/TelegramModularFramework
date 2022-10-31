@@ -20,22 +20,25 @@ public class TelegramModulesService
     private readonly ILogger<TelegramModulesService> _logger;
     private readonly TelegramBotHostedService _host;
     private readonly IStringSplitter _splitter;
+    private readonly ITelegramBotClient _client;
 
     private List<ModuleInfo> _modules = new();
     public ImmutableArray<ModuleInfo> Modules => ImmutableArray.Create(_modules.ToArray());
 
     private Dictionary<string, CommandInfo> _commands = new();
-    public ImmutableArray<CommandInfo> Commands => ImmutableArray.Create(_commands.Values.ToArray());
+    public Dictionary<string, CommandInfo> Commands => _commands;
+    public IEnumerable<CommandInfo> VisibleCommands => _commands.Values.Where(c => !c.HiddenFromList);
 
     public event Func<CommandInfo?, ModuleContext, Result, Task> CommandExecuted; 
 
     public TelegramModulesService(IServiceProvider provider, ILogger<TelegramModulesService> logger,
-        TelegramBotHostedService host, IStringSplitter splitter)
+        TelegramBotHostedService host, IStringSplitter splitter, ITelegramBotClient client)
     {
         _provider = provider;
         _logger = logger;
         _host = host;
         _splitter = splitter;
+        _client = client;
     }
 
     public async Task<bool> HandleUpdateAsync(ITelegramBotClient botClient, Update update,
@@ -178,6 +181,8 @@ public class TelegramModulesService
                 Attributes = m.GetCustomAttribute<CommandAttribute>(),
                 Module = moduleInfo,
                 Name = m.GetCustomAttribute<CommandAttribute>().Name ?? m.Name.ToLower(),
+                Summary = m.GetCustomAttribute<SummaryAttribute>()?.Summary ?? "",
+                HiddenFromList = m.GetCustomAttribute<CommandAttribute>().HideFromList,
                 RunMode = m.GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync
             });
 
@@ -203,5 +208,17 @@ public class TelegramModulesService
         {
             AddModuleInternal(module);
         }
+    }
+
+    public async Task SetMyCommands()
+    {
+        var commands = _commands
+            .Where(c => !c.Value.HiddenFromList && !string.IsNullOrEmpty(c.Value.Summary))
+            .Select(c => new BotCommand()
+            {
+                Command = c.Value.Name,
+                Description = c.Value.Summary
+            });
+        await _client.SetMyCommandsAsync(commands);
     }
 }

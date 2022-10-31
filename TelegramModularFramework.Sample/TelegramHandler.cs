@@ -28,6 +28,7 @@ public class TelegramHandler: BackgroundService
         _modulesService.CommandExecuted += OnCommandExecuted;
         
         _modulesService.AddModules();
+        await _modulesService.SetMyCommands();
     }
 
     private async Task OnCommandExecuted(CommandInfo? commandInfo, ModuleContext context, Result result)
