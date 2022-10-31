@@ -1,4 +1,5 @@
 ﻿using Telegram.Bot;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramModularFramework.Attributes;
 using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services;
@@ -13,6 +14,18 @@ public class SampleModule: BaseTelegramModule
     public SampleModule(TelegramModulesService modulesService)
     {
         _modulesService = modulesService;
+    }
+
+    [Command]
+    public async Task Start()
+    {
+        var keyboard = new ReplyKeyboardMarkup(new KeyboardButton[]
+        {
+            "Action",
+            "Show Something"
+        });
+        keyboard.ResizeKeyboard = true;
+        await ReplyAsync($"Welcome!", replyMarkup: keyboard);
     }
 
     [Command("test")]
@@ -58,5 +71,18 @@ public class SampleModule: BaseTelegramModule
     {
         await ReplyAsync($@"Available commands:
 {string.Join("\n", _modulesService.VisibleCommands.Select(c => $"/{c.Name} - {c.Summary}"))}");
+    }
+
+    [Action]
+    public async Task ShowSomething()
+    {
+        ReplyAsync("Something");
+    }
+    
+    [Action("Action")]
+    [Command("command")]
+    public async Task Hybrid()
+    {
+        ReplyAsync("Hybrid");
     }
 }

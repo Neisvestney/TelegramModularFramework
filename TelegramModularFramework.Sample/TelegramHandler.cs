@@ -26,6 +26,7 @@ public class TelegramHandler: BackgroundService
         _events.OnUpdate += HandleUpdateAsync;
         _events.OnError += HandleErrorAsync;
         _modulesService.CommandExecuted += OnCommandExecuted;
+        _modulesService.ActionExecuted += ModulesServiceOnActionExecuted;
         
         _modulesService.AddModules();
         await _modulesService.SetMyCommands();
@@ -38,7 +39,7 @@ public class TelegramHandler: BackgroundService
             var errorMessage = result.Exception switch
             {
                 UnknownCommand unknownCommand => context.Update.Message.Chat.Type == ChatType.Private 
-                    ? $"Unknown command {context.CommandString}" 
+                    ? $"Unknown command **{context.CommandString}**" 
                     : null,
                 BadArgs badArgs => $"Too few arguments",
                 TypeConvertException typeConvert => $"{typeConvert.ErrorReason} at position {typeConvert.Position + 1}",
@@ -47,7 +48,24 @@ public class TelegramHandler: BackgroundService
             };
             if (errorMessage != null)
             {
-                await context.Client.SendTextMessageAsync(context.Update.Message.Chat.Id, errorMessage);
+                await context.Client.SendTextMessageAsync(context.Update.Message.Chat.Id, errorMessage, parseMode: ParseMode.MarkdownV2);
+            }
+        }
+    }
+    
+    private async Task ModulesServiceOnActionExecuted(ActionInfo? actionInfo, ModuleContext context, Result result)
+    {
+        if (!result.Success)
+        {
+            var errorMessage = result.Exception switch
+            {
+                UnknownCommand unknownCommand => $"Unknown action **{context.CommandString}**",
+                BaseCommandException => result.Exception.Message,
+                _ => null
+            };
+            if (errorMessage != null)
+            {
+                await context.Client.SendTextMessageAsync(context.Update.Message.Chat.Id, errorMessage, parseMode: ParseMode.MarkdownV2);
             }
         }
     }

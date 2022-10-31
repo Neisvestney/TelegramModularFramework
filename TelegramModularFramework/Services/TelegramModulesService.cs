@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
@@ -29,7 +30,9 @@ public class TelegramModulesService
     public Dictionary<string, CommandInfo> Commands => _commands;
     public IEnumerable<CommandInfo> VisibleCommands => _commands.Values.Where(c => !c.HiddenFromList);
 
+    private Dictionary<string, ActionInfo> _actions = new();
     public event Func<CommandInfo?, ModuleContext, Result, Task> CommandExecuted; 
+    public event Func<ActionInfo?, ModuleContext, Result, Task> ActionExecuted; 
 
     public TelegramModulesService(IServiceProvider provider, ILogger<TelegramModulesService> logger,
         TelegramBotHostedService host, IStringSplitter splitter, ITelegramBotClient client)
@@ -47,8 +50,17 @@ public class TelegramModulesService
         switch (update.Type)
         {
             case UpdateType.Message:
-                await HandleCommand(botClient, update, cancellationToken);
-                return true;
+                if (update.Message!.Text.StartsWith("/"))
+                {
+                    await HandleCommand(botClient, update, cancellationToken);
+                    return true;
+                }
+                else if (update.Message.Chat.Type == ChatType.Private)
+                {
+                    await HandleAction(botClient, update, cancellationToken);
+                    return true;
+                }
+                return false;
             default:
                 return false;
         }
@@ -63,7 +75,7 @@ public class TelegramModulesService
 
         if (_commands.TryGetValue(commandString, out var commandInfo))
         {
-            _logger.LogDebug("Executing {command} from {module}", commandInfo.Name, commandInfo.Module.Type.Name);
+            _logger.LogDebug("Executing command {command} from {module}", commandInfo.Name, commandInfo.Module.Type.Name);
             using (var scope = _provider.CreateScope())
             {
                 // Context
@@ -83,15 +95,15 @@ public class TelegramModulesService
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Exception during executing {command} from {module}", commandInfo.Name, commandInfo.Module.Type.Name);
+                    _logger.LogError(e, "Exception during executing command {command} from {module}", commandInfo.Name, commandInfo.Module.Type.Name);
                     result = Result.FromError(e);
                 }
-                await CommandExecuted?.InvokeAsync(commandInfo, context, result);
+                if (CommandExecuted != null) await CommandExecuted.InvokeAsync(commandInfo, context, result);
             }
         }
         else
         {
-            await CommandExecuted?.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
+            if (CommandExecuted != null) await CommandExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
         }
     }
 
@@ -149,6 +161,62 @@ public class TelegramModulesService
             await (result as Task);
     }
 
+    private async Task HandleAction(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        var actionString = update.Message.Text;
+        var context = new ModuleContext(botClient, update, new  String[]{}, actionString);
+        if (_actions.TryGetValue(actionString, out var actionInfo))
+        {
+            _logger.LogDebug("Executing action {action} from {module}", actionInfo.Name, actionInfo.Module.Type.Name);
+            using (var scope = _provider.CreateScope())
+            {
+                // Context
+                var module = actionInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                module.Context = context;
+
+                // Method
+                Result result;
+                try
+                {
+                    await InvokeAction(actionInfo, module, scope.ServiceProvider);
+                    result = Result.FromSuccess();
+                }
+                catch (BaseCommandException e)
+                {
+                    result = Result.FromError(e);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Exception during executing cation {action} from {module}", actionInfo.Name, actionInfo.Module.Type.Name);
+                    result = Result.FromError(e);
+                }
+                if (ActionExecuted != null) await ActionExecuted.InvokeAsync(actionInfo, context, result);
+            }
+        }
+        else
+        {
+            if (ActionExecuted != null) await ActionExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
+        }
+    }
+
+    private async Task InvokeAction(ActionInfo actionInfo, BaseTelegramModule module, IServiceProvider scoped)
+    {
+        var returnTask = actionInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
+        
+        var parametersInfos = actionInfo.MethodInfo.GetParameters();
+        var parameters = new object[parametersInfos.Length];
+
+        if (parametersInfos.Length > 0)
+        {
+            throw new ArgumentException("Action cannot take parameters");
+        }
+        
+        var result = actionInfo.MethodInfo.Invoke(module, parameters);
+
+        if (returnTask && actionInfo.RunMode == RunMode.Sync)
+            await (result as Task);
+    }
+
     public void AddModule<T>() where T : BaseTelegramModule
     {
         AddModuleInternal(typeof(T));
@@ -171,6 +239,7 @@ public class TelegramModulesService
             Type = module,
             Factory = ActivatorUtilities.CreateFactory(module, new Type[] { })
         };
+        _modules.Add(moduleInfo);
 
         var commands = module
             .GetMethods()
@@ -186,12 +255,32 @@ public class TelegramModulesService
                 RunMode = m.GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync
             });
 
-        _modules.Add(moduleInfo);
         foreach (var command in commands)
         {
             if (!_commands.TryAdd("/" + command.Name, command))
             {
-                throw new Exception($"Commands with name {command.Name} already exists");
+                throw new Exception($"Command with name {command.Name} already exists");
+            }
+        }
+
+        var actions = module
+            .GetMethods()
+            .Where(m => m.IsDefined(typeof(ActionAttribute)))
+            .Select(m => new ActionInfo()
+            {
+                MethodInfo = m,
+                Attributes = m.GetCustomAttribute<ActionAttribute>(),
+                Module = moduleInfo,
+                Name = m.GetCustomAttribute<ActionAttribute>().Name ?? Regex.Replace(m.Name, "([A-Z])", " $1", RegexOptions.Compiled).Trim(),
+                Summary = m.GetCustomAttribute<SummaryAttribute>()?.Summary ?? "",
+                RunMode = m.GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync
+            });
+        
+        foreach (var action in actions)
+        {
+            if (!_actions.TryAdd(action.Name, action))
+            {
+                throw new Exception($"Action with name {action.Name} already exists");
             }
         }
     }
