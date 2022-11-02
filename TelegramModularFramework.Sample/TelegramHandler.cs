@@ -27,6 +27,7 @@ public class TelegramHandler: BackgroundService
         _events.OnError += HandleErrorAsync;
         _modulesService.CommandExecuted += OnCommandExecuted;
         _modulesService.ActionExecuted += ModulesServiceOnActionExecuted;
+        _modulesService.StateExecuted += OnStateExecuted;
         
         _modulesService.AddModules();
         await _modulesService.SetMyCommands();
@@ -60,6 +61,26 @@ public class TelegramHandler: BackgroundService
             var errorMessage = result.Exception switch
             {
                 UnknownCommand unknownCommand => $"Unknown action **{context.CommandString}**",
+                BaseCommandException => result.Exception.Message,
+                _ => null
+            };
+            if (errorMessage != null)
+            {
+                await context.Client.SendTextMessageAsync(context.Update.Message.Chat.Id, errorMessage, parseMode: ParseMode.MarkdownV2);
+            }
+        }
+    }
+    
+    private async Task OnStateExecuted(StateInfo? stateInfo, ModuleContext context, Result result)
+    {
+        if (!result.Success)
+        {
+            var errorMessage = result.Exception switch
+            {
+                BadArgs badArgs => $"Too few arguments",
+                TypeConvertException typeConvert => $"{typeConvert.ErrorReason} at position {typeConvert.Position + 1}",
+                ValidationError validation => $"{validation.Message} at position {validation.Position + 1}",
+                UnknownCommand => "Unexpected state value\\! Try again",
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };

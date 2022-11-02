@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using TelegramModularFramework.Services;
+using TelegramModularFramework.Services.State;
 using TelegramModularFramework.Services.TypeReaders;
 using TelegramModularFramework.Services.Utils;
 
@@ -23,10 +25,12 @@ public static class TelegramBotHostBuilderExtensions
         });
     }
     
-    public static IHostBuilder AddTelegramModulesService(this IHostBuilder builder)
+    public static IHostBuilder AddTelegramModulesService(this IHostBuilder builder, Action<HostBuilderContext, TelegramModulesConfiguration> config)
     {
         return builder.ConfigureServices((context, services) =>
         {
+            services.Configure<TelegramModulesConfiguration>(c => config(context, c));
+            services.AddTransient<IStateHolder>(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.StateHolder);
             services.AddSingleton<TelegramModulesService>();
             services.AddTransient<IStringSplitter, StringSplitter>();
             services.AddSingleton<ITypeReader, StringTypeReader>();

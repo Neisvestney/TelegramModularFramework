@@ -17,12 +17,14 @@ public class SampleModule: BaseTelegramModule
     }
 
     [Command]
+    [Summary("Start")]
     public async Task Start()
     {
         var keyboard = new ReplyKeyboardMarkup(new KeyboardButton[]
         {
             "Action",
-            "Show Something"
+            "Show Something",
+            "Enter Name",
         });
         keyboard.ResizeKeyboard = true;
         await ReplyAsync($"Welcome!", replyMarkup: keyboard);

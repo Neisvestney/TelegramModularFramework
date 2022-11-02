@@ -24,7 +24,7 @@ try
         {
             c.TelegramBotClientOptions = new TelegramBotClientOptions(context.Configuration["Telegram:Token"]);
         })
-        .AddTelegramModulesService()
+        .AddTelegramModulesService((context, c) => {})
         .ConfigureServices(services =>
         {
             services.AddHostedService<TelegramHandler>();

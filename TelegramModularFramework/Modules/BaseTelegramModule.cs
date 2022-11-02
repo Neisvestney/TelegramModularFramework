@@ -5,7 +5,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramModularFramework.Modules;
 
-public class BaseTelegramModule
+public class  BaseTelegramModule
 {
     public ModuleContext Context { get; set; }
 
@@ -35,4 +35,6 @@ public class BaseTelegramModule
             cancellationToken
         );
     }
+
+    public Task ChangeState(string path) => Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, path);
 }
