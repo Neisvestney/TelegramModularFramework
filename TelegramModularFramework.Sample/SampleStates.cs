@@ -21,6 +21,7 @@ public class SampleStates: BaseTelegramModule
         [StateHandler]
         public async Task HandleState(string input)
         {
+            if (input == null) throw new ValidationError("No text in message", nameof(input), 0);
             await ReplyAsync($"You entered: {input}");
             await ReplyAsync($"Enter age:");
             ChangeState("age");

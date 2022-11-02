@@ -69,12 +69,12 @@ public class TelegramModulesService
                         await HandleState(botClient, update, state, cancellationToken);
                         return true;
                     }
-                    else if (update.Message!.Text.StartsWith("/"))
+                    else if (update.Message!.Text?.StartsWith("/") ?? false)
                     {
                         await HandleCommand(botClient, update, cancellationToken);
                         return true;
                     }
-                    else if (update.Message.Chat.Type == ChatType.Private)
+                    else if (update.Message!.Chat.Type == ChatType.Private && !string.IsNullOrEmpty(update.Message!.Text))
                     {
                         await HandleAction(botClient, update, cancellationToken);
                         return true;
@@ -95,7 +95,7 @@ public class TelegramModulesService
     private async Task HandleState(ITelegramBotClient botClient, Update update, string state,
         CancellationToken cancellationToken)
     {
-        var args = update.Message.Text!;
+        var args = update.Message.Text;
         var context = new ModuleContext(botClient, this, update, args, state);
 
         if (_states.TryGetValue(state, out var stateInfo))
@@ -137,16 +137,16 @@ public class TelegramModulesService
         }
     }
     
-    private async Task InvokeStateHandler(StateInfo stateInfo, BaseTelegramModule module, IServiceProvider scoped, string args)
+    private async Task InvokeStateHandler(StateInfo stateInfo, BaseTelegramModule module, IServiceProvider scoped, string? args)
     {
         var returnTask = stateInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
 
         var parametersInfos = stateInfo.MethodInfo.GetParameters();
-        var splittedArgs = _splitter.Split(args);
         var parameters = new object[parametersInfos.Length];
 
         if (stateInfo.ParseArgs)
         {
+            var splittedArgs = _splitter.Split(args);
             parameters = await ParseParameters(parametersInfos, splittedArgs, module.Context);
         }
         else
@@ -490,7 +490,7 @@ public class TelegramModulesService
             var currentPath = await _stateHolder.GetState(chatId);
             var baseUri = new Uri("state://" + currentPath + (currentPath?.EndsWith("/") ?? false ? "" : "/"));
             getPath = new Uri(baseUri, path).AbsolutePath;
-        };
+        }
 
         _stateHolder.SetState(chatId, getPath);
     }
