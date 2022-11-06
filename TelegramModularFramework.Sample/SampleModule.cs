@@ -38,10 +38,10 @@ public class SampleModule: BaseTelegramModule
     }
     
     [Command("test2")]
-    [Summary("Number input")]
-    public async Task TestCommand2(int? number)
+    [Summary("Numbers input")]
+    public async Task TestCommand2(int number, float numberFloat, double numberDouble, bool boolean)
     {
-        await ReplyAsync($"Test2 {number + 1}");
+        await ReplyAsync($"Test2 {number} {numberFloat} {numberDouble} {boolean}");
     }
 
     [Command]

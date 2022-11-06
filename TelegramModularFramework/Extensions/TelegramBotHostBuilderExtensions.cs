@@ -35,6 +35,9 @@ public static class TelegramBotHostBuilderExtensions
             services.AddTransient<IStringSplitter, StringSplitter>();
             services.AddSingleton<ITypeReader, StringTypeReader>();
             services.AddSingleton<ITypeReader, IntTypeReader>();
+            services.AddSingleton<ITypeReader, BooleanTypeReader>();
+            services.AddSingleton<ITypeReader, DoubleTypeReader>();
+            services.AddSingleton<ITypeReader, FloatTypeReader>();
         });
     }
 }
