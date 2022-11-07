@@ -16,6 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TelegramModularFramework\TelegramModularFramework.csproj" />
+      <ProjectReference Include="..\..\src\TelegramModularFramework\TelegramModularFramework.csproj" />
     </ItemGroup>
 </Project>
