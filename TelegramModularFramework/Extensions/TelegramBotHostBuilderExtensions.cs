@@ -10,8 +10,17 @@ using TelegramModularFramework.Services.Utils;
 
 namespace TelegramModularFramework;
 
+/// <summary>
+/// Extends <see cref="T:Microsoft.Extensions.Hosting.IHostBuilder" /> with TelegramModularFramework configuration methods.
+/// </summary>
 public static class TelegramBotHostBuilderExtensions
 {
+    /// <summary>
+    /// Adds and configures a <see cref="T:Telegram.Bot.ITelegramBotClient"/> along with the required services.
+    /// </summary>
+    /// <param name="builder">The host builder to configure.</param>
+    /// <param name="config">The delegate to configure <see cref="T:TelegramModularFramework.Services.TelegramBotHostConfiguration"/></param>
+    /// <returns>Host builder</returns>
     public static IHostBuilder ConfigureTelegramBotHost(this IHostBuilder builder, Action<HostBuilderContext, TelegramBotHostConfiguration> config)
     {
         return builder.ConfigureServices((context, services) =>
@@ -25,6 +34,12 @@ public static class TelegramBotHostBuilderExtensions
         });
     }
     
+    /// <summary>
+    /// Adds and configures a <see cref="T:TelegramModularFramework.Services.TelegramModulesService"/> along with the required services and basics <see cref="T:TelegramModularFramework.Services.TypeReaders.ITypeReader">TypeReaders</see>.
+    /// </summary>
+    /// <param name="builder">The host builder to configure.</param>
+    /// <param name="config">The delegate to configure <see cref="T:TelegramModularFramework.Services.TelegramModulesConfiguration"/></param>
+    /// <returns>Host builder</returns>
     public static IHostBuilder AddTelegramModulesService(this IHostBuilder builder, Action<HostBuilderContext, TelegramModulesConfiguration> config)
     {
         return builder.ConfigureServices((context, services) =>

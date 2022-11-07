@@ -18,6 +18,9 @@ using TelegramModularFramework.Services.Utils;
 
 namespace TelegramModularFramework.Services;
 
+/// <summary>
+/// Service for handling commands, actions and states from registered modules
+/// </summary>
 public class TelegramModulesService
 {
     private readonly IServiceProvider _provider;
@@ -29,17 +32,41 @@ public class TelegramModulesService
     private readonly IStateHolder _stateHolder;
 
     private List<ModuleInfo> _modules = new();
+    
+    /// <summary>
+    /// List of all loaded modules
+    /// </summary>
     public ImmutableArray<ModuleInfo> Modules => ImmutableArray.Create(_modules.ToArray());
 
     private Dictionary<string, CommandInfo> _commands = new();
+    
+    /// <summary>
+    /// List of all commands
+    /// </summary>
     public Dictionary<string, CommandInfo> Commands => _commands;
+    
+    /// <summary>
+    /// List of all visible commands
+    /// </summary>
     public IEnumerable<CommandInfo> VisibleCommands => _commands.Values.Where(c => !c.HiddenFromList);
 
     private Dictionary<string, ActionInfo> _actions = new();
 
     private Dictionary<string, StateInfo> _states = new();
+    
+    /// <summary>
+    /// Async event that executes after command executed successfully or not
+    /// </summary>
     public event Func<CommandInfo?, ModuleContext, Result, Task> CommandExecuted;
+    
+    /// <summary>
+    /// Async event that executes after action executed successfully or not
+    /// </summary>
     public event Func<ActionInfo?, ModuleContext, Result, Task> ActionExecuted;
+    
+    /// <summary>
+    /// Async event that executes after state executed successfully or not
+    /// </summary>
     public event Func<StateInfo?, ModuleContext, Result, Task> StateExecuted;
 
     public TelegramModulesService(IServiceProvider provider, ILogger<TelegramModulesService> logger,
@@ -55,6 +82,13 @@ public class TelegramModulesService
         _stateHolder = stateHolder;
     }
 
+    /// <summary>
+    /// Handle update from telegram bot api and executes modules
+    /// </summary>
+    /// <param name="botClient">BotClient from update event</param>
+    /// <param name="update">Update object from update event</param>
+    /// <param name="cancellationToken">CancellationToken from update event</param>
+    /// <returns>true if update handled by framework otherwise returns false</returns>
     public async Task<bool> HandleUpdateAsync(ITelegramBotClient botClient, Update update,
         CancellationToken cancellationToken)
     {
@@ -332,12 +366,23 @@ public class TelegramModulesService
         if (returnTask && actionInfo.RunMode == RunMode.Sync)
             await (result as Task);
     }
-
+    
+    
+    /// <summary>
+    /// Adds single module
+    /// </summary>
+    /// <typeparam name="T">Class inherited from <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/></typeparam>
     public void AddModule<T>() where T : BaseTelegramModule
     {
         AddModuleInternal(typeof(T));
     }
 
+    
+    /// <summary>
+    /// Adds single module
+    /// </summary>
+    /// <param name="module">Type of class inherited from <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/></param>
+    /// <exception cref="Exception">Class has wrong definition</exception>
     public void AddModule(Type module)
     {
         if (!module.IsPublic || module.IsAbstract || !module.IsSubclassOf(typeof(BaseTelegramModule)))
@@ -450,6 +495,12 @@ public class TelegramModulesService
         }
     }
 
+    
+    /// <summary>
+    /// Adds all modules from given assembly.
+    /// If assembly is null, the calling assembly is taken.
+    /// </summary>
+    /// <param name="assembly">Assembly to get modules.</param>
     public void AddModules(Assembly assembly = null)
     {
         if (assembly == null) assembly = Assembly.GetCallingAssembly();
@@ -464,6 +515,10 @@ public class TelegramModulesService
         }
     }
 
+    /// <summary>
+    /// Sets list of commands via telegram bot api
+    /// See <see cref="Telegram.Bot.TelegramBotClientExtensions.SetMyCommandsAsync"/> for details
+    /// </summary>
     public async Task SetMyCommands()
     {
         var commands = _commands
@@ -477,6 +532,12 @@ public class TelegramModulesService
         await _client.SetMyCommandsAsync(commands);
     }
 
+    
+    /// <summary>
+    /// Changes state of user by chatId and path
+    /// </summary>
+    /// <param name="chatId">Chat Id</param>
+    /// <param name="path">Relative or absolute path</param>
     public async Task ChangeStateAsync(long chatId, string path)
     {
         string getPath = "";

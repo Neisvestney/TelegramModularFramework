@@ -4,6 +4,9 @@ using Telegram.Bot.Types;
 
 namespace TelegramModularFramework.Services;
 
+/// <summary>
+/// The <see cref=" Telegram.Bot.Extensions.Polling.IUpdateHandler"/> to route <see cref="T:Telegram.Bot.ITelegramBotClient"/> update and error events 
+/// </summary>
 public class TelegramBotEvents: IUpdateHandler
 {
     public event Func<ITelegramBotClient, Update, CancellationToken, Task> OnUpdate;

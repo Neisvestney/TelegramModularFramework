@@ -7,6 +7,10 @@ using Telegram.Bot.Types.Enums;
 
 namespace TelegramModularFramework.Services;
 
+/// <summary>
+/// Hosted service to start polling from Telegram API
+/// <see cref="TelegramModularFramework.Services.TelegramBotEvents"/> receives updates
+/// </summary>
 public class TelegramBotHostedService: BackgroundService
 {
     private readonly ITelegramBotClient _botClient;
