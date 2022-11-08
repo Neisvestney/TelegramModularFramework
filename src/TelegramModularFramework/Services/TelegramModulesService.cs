@@ -481,18 +481,23 @@ public class TelegramModulesService
         var parameters = new object[parametersInfos.Length];
 
         var dataSplit = data.Split("/").Skip(1).ToArray();
-        var array = ParsePath(callbackQueryHandlerInfo.Name).ToArray();
-        for (var i = 0; i < array.Length; i++)
+        var pathParts = ParsePath(callbackQueryHandlerInfo.Name).ToArray();
+
+        foreach (var parameterInfo in parametersInfos)
         {
-            var pathPart = array[i];
-            if (pathPart.Dynamic)
+            var i = Array.FindIndex(pathParts, p => p.Dynamic && p.Name.ToLower() == parameterInfo.Name.ToLower());
+            if (i == -1) throw new CallbackQueryHandlerBadPath(pathParts, parameterInfo, data);
+            
+            var reader = _provider
+                .GetServices<ITypeReader>()
+                .First(r => r.Type == parameterInfo.ParameterType);
+            var read = await reader.ReadTypeAsync(module.Context, dataSplit[i]);
+            if (!read.Success)
             {
-                var parameter = parametersInfos.FirstOrDefault(p => p.Name.ToLower() == pathPart.Name.ToLower() && p.ParameterType == typeof(string));
-                if (parameter != null)
-                {
-                    parameters[parameter.Position] = dataSplit[i];
-                }
+                throw new TypeConvertException(read.ErrorReason, parameterInfo, i);
             }
+
+            parameters[parameterInfo.Position] = read.Result;
         }
 
         var result = callbackQueryHandlerInfo.MethodInfo.Invoke(module, parameters);

@@ -30,7 +30,7 @@ public class SampleCallbackButtons: BaseTelegramModule
         [CallbackQueryHandler("prev")]
         public async Task HandlePrev()
         {
-            await EditMessageTextAsync($"Next");
+            await EditMessageTextAsync($"Prev");
         }
         
         [CallbackQueryHandler("next")]
@@ -39,8 +39,8 @@ public class SampleCallbackButtons: BaseTelegramModule
             await EditMessageTextAsync($"Next");
         }
         
-        [CallbackQueryHandler("set/{index:*}")]
-        public async Task HandleNumber(string index)
+        [CallbackQueryHandler("set/{index}")]
+        public async Task HandleNumber(int index)
         {
             await EditMessageTextAsync($"Page: {index}");
         }
