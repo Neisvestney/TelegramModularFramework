@@ -34,13 +34,19 @@ public class ModuleContext
     /// Command string line '/test'
     /// </summary>
     public string CommandString { get; set; }
+    
+    /// <summary>
+    /// Full name of module group 
+    /// </summary>
+    public string Group { get; set; }
 
-    public ModuleContext(ITelegramBotClient client, TelegramModulesService modulesService, Update update, string args, string commandString)
+    public ModuleContext(ITelegramBotClient client, TelegramModulesService modulesService, Update update, string args, string commandString, string group)
     {
         Client = client;
         ModulesService = modulesService;
         Update = update;
         CommandArgs = args;
         CommandString = commandString;
+        Group = group;
     }
 }

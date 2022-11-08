@@ -1,14 +1,14 @@
 ﻿namespace TelegramModularFramework.Attributes;
 
 /// <summary>
-/// Specifies that <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/> is state
+/// Specifies that <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/> in group
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class StateAttribute: Attribute
+public class GroupAttribute: Attribute
 {
     public string Name { get; set; }
 
-    public StateAttribute(string name)
+    public GroupAttribute(string name)
     {
         if (string.IsNullOrEmpty(name)) throw new ArgumentException("Name cannot be empty");
         if (name.Contains("/")) throw new ArgumentException("Name cannot contain '/'");

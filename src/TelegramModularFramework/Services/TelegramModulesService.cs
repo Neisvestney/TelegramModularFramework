@@ -53,7 +53,9 @@ public class TelegramModulesService
     private Dictionary<string, ActionInfo> _actions = new();
 
     private Dictionary<string, StateInfo> _states = new();
-    
+
+    private List<CallbackQueryHandlerInfo> _callbackQueryHandlers = new();
+
     /// <summary>
     /// Async event that executes after command executed successfully or not
     /// </summary>
@@ -68,6 +70,11 @@ public class TelegramModulesService
     /// Async event that executes after state executed successfully or not
     /// </summary>
     public event Func<StateInfo?, ModuleContext, Result, Task> StateExecuted;
+    
+    /// <summary>
+    /// Async event that executes after state executed successfully or not
+    /// </summary>
+    public event Func<CallbackQueryHandlerInfo?, ModuleContext, Result, Task> CallbackExecuted;
 
     public TelegramModulesService(IServiceProvider provider, ILogger<TelegramModulesService> logger,
         TelegramBotHostedService host, IStringSplitter splitter, ITelegramBotClient client,
@@ -115,6 +122,9 @@ public class TelegramModulesService
                     }
 
                     return false;
+                case UpdateType.CallbackQuery:
+                    await HandleCallbackQuery(botClient, update, cancellationToken);
+                    return true;
                 default:
                     return false;
             }
@@ -130,7 +140,7 @@ public class TelegramModulesService
         CancellationToken cancellationToken)
     {
         var args = update.Message.Text;
-        var context = new ModuleContext(botClient, this, update, args, state);
+        var context = new ModuleContext(botClient, this, update, args, state, null);
 
         if (_states.TryGetValue(state, out var stateInfo))
         {
@@ -139,6 +149,7 @@ public class TelegramModulesService
             {
                 // Context
                 var module = stateInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                context.Group = stateInfo.Module.Group;
                 module.Context = context;
 
                 // Method
@@ -203,7 +214,7 @@ public class TelegramModulesService
         var args = update.Message.Text!.Split(' ');
         var commandString = args[0].Replace($"@{_host.User.Username}", "");
         var argsString = string.Join(' ', args.Skip(1).ToArray());
-        var context = new ModuleContext(botClient, this, update, argsString, commandString);
+        var context = new ModuleContext(botClient, this, update, argsString, commandString, null);
 
         if (_commands.TryGetValue(commandString, out var commandInfo))
         {
@@ -213,6 +224,7 @@ public class TelegramModulesService
             {
                 // Context
                 var module = commandInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                context.Group = commandInfo.Module.Group;
                 module.Context = context;
 
                 // Method
@@ -262,7 +274,7 @@ public class TelegramModulesService
     private async Task HandleAction(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var actionString = update.Message.Text;
-        var context = new ModuleContext(botClient, this, update, "", actionString);
+        var context = new ModuleContext(botClient, this, update, "", actionString, null);
         if (_actions.TryGetValue(actionString, out var actionInfo))
         {
             _logger.LogDebug("Executing action {action} from {module}", actionInfo.Name, actionInfo.Module.Type.Name);
@@ -270,6 +282,7 @@ public class TelegramModulesService
             {
                 // Context
                 var module = actionInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                context.Group = actionInfo.Module.Group;
                 module.Context = context;
 
                 // Method
@@ -285,7 +298,7 @@ public class TelegramModulesService
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Exception during executing cation {action} from {module}", actionInfo.Name,
+                    _logger.LogError(e, "Exception during executing action {action} from {module}", actionInfo.Name,
                         actionInfo.Module.Type.Name);
                     result = Result.FromError(e);
                 }
@@ -367,6 +380,127 @@ public class TelegramModulesService
             await (result as Task);
     }
     
+    private async Task HandleCallbackQuery(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        var context = new ModuleContext(botClient, this, update, null, update.CallbackQuery.Data, null);
+
+        var callbackQueryHandlerInfo = _callbackQueryHandlers
+            .Select(c => new
+            {
+                c = c,
+                pattern = PatternFromPath(c.Name)
+            })
+            .Where(c => Regex.IsMatch(update.CallbackQuery.Data, c.pattern))
+            .Select(c => c.c)
+            .FirstOrDefault();
+        
+        if (callbackQueryHandlerInfo != null)
+        {
+            _logger.LogDebug("Executing callback query handler {handler} from {module}", callbackQueryHandlerInfo.Name, callbackQueryHandlerInfo.Module.Type.Name);
+            using (var scope = _provider.CreateScope())
+            {
+                // Context
+                var module = callbackQueryHandlerInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                context.Group = callbackQueryHandlerInfo.Module.Group;
+                module.Context = context;
+
+                // Method
+                Result result;
+                try
+                {
+                    await InvokeCallbackHandler(callbackQueryHandlerInfo, module, update.CallbackQuery.Data, scope.ServiceProvider);
+                    result = Result.FromSuccess();
+                }
+                catch (BaseCommandException e)
+                {
+                    result = Result.FromError(e);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Exception during executing cation {action} from {module}", callbackQueryHandlerInfo.Name,
+                        callbackQueryHandlerInfo.Module.Type.Name);
+                    result = Result.FromError(e);
+                }
+
+                if (CallbackExecuted != null) await CallbackExecuted.InvokeAsync(callbackQueryHandlerInfo, context, result);
+            }
+        }
+        else
+        {
+            if (CallbackExecuted != null)
+                await CallbackExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
+            await ChangeStateAsync(update.Message.Chat.Id, "/");
+        }
+    }
+
+    private string PatternFromPath(string path)
+    {
+        // /sample/{data:*} => /sample/*
+
+        return "/" + string.Join('/', ParsePath(path).Select(p => p.Template));
+    }
+
+    private IEnumerable<PathPart> ParsePath(string path)
+    {
+        return path
+            .Split("/")
+            .Skip(1) // Starts from '/'
+            .Select(p => new
+            {
+                Match = Regex.Match(p, @"\{([^()]+)\}"),
+                Path = p
+            })
+            .Select(p => new
+            {
+                Match = p.Match,
+                Path = p.Path,
+                Split = p.Match.Success ? p.Match.Value.Remove(0, 1).Remove(p.Match.Value.Length - 2, 1).Split(':') : null
+            })
+            .Select(p => new PathPart()
+            {
+                Dynamic = p.Match.Success,
+                Name = p.Split?[0] ?? p.Path,
+                Template = p.Match.Success ? (p.Split?.Length > 0 ? string.Join(':', p.Split.Skip(1)) : "*") : p.Path
+            });
+        
+        // return Regex
+        //     .Matches(path, @"\{([^()]+)\}")
+        //     .Select(m => m.Value.Split(':'))
+        //     .Select(m => new PathPart()
+        //     {
+        //         Name = m[0],
+        //         Template = m.Length > 0 ? string.Join(':', m.Skip(1)) : "*"
+        //     });
+    }
+
+    public async Task InvokeCallbackHandler(CallbackQueryHandlerInfo callbackQueryHandlerInfo, BaseTelegramModule module, string data, IServiceProvider scoped)
+    {
+        var returnTask = callbackQueryHandlerInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
+
+        var parametersInfos = callbackQueryHandlerInfo.MethodInfo.GetParameters();
+        var parameters = new object[parametersInfos.Length];
+
+        var dataSplit = data.Split("/").Skip(1).ToArray();
+        var array = ParsePath(callbackQueryHandlerInfo.Name).ToArray();
+        for (var i = 0; i < array.Length; i++)
+        {
+            var pathPart = array[i];
+            if (pathPart.Dynamic)
+            {
+                var parameter = parametersInfos.FirstOrDefault(p => p.Name.ToLower() == pathPart.Name.ToLower() && p.ParameterType == typeof(string));
+                if (parameter != null)
+                {
+                    parameters[parameter.Position] = dataSplit[i];
+                }
+            }
+        }
+
+        var result = callbackQueryHandlerInfo.MethodInfo.Invoke(module, parameters);
+
+        if (returnTask && callbackQueryHandlerInfo.RunMode == RunMode.Sync)
+            await (result as Task);
+    }
+    
     
     /// <summary>
     /// Adds single module
@@ -395,10 +529,22 @@ public class TelegramModulesService
 
     private void AddModuleInternal(Type module)
     {
+        var groupName = "/" +  module.GetCustomAttribute<GroupAttribute>()?.Name ?? "";
+        Type type = module;
+        while (type.IsNested)
+        {
+            type = type.DeclaringType;
+            if (type.IsDefined(typeof(GroupAttribute)))
+            {
+                groupName = "/" + type.GetCustomAttribute<GroupAttribute>().Name + groupName;
+            }
+        }
+        
         var moduleInfo = new ModuleInfo()
         {
             Type = module,
-            Factory = ActivatorUtilities.CreateFactory(module, new Type[] { })
+            Factory = ActivatorUtilities.CreateFactory(module, new Type[] { }),
+            Group = groupName
         };
         _modules.Add(moduleInfo);
         _logger.LogDebug("Module {module} added", module);
@@ -406,7 +552,7 @@ public class TelegramModulesService
         var commands = module
             .GetMethods()
             .Where(m => m.IsDefined(typeof(CommandAttribute)))
-            .Select(m => new CommandInfo()
+            ?.Select(m => new CommandInfo()
             {
                 MethodInfo = m,
                 Attributes = m.GetCustomAttribute<CommandAttribute>(),
@@ -430,7 +576,7 @@ public class TelegramModulesService
         var actions = module
             .GetMethods()
             .Where(m => m.IsDefined(typeof(ActionAttribute)))
-            .Select(m => new ActionInfo()
+            ?.Select(m => new ActionInfo()
             {
                 MethodInfo = m,
                 Attributes = m.GetCustomAttribute<ActionAttribute>(),
@@ -450,46 +596,59 @@ public class TelegramModulesService
 
             _logger.LogDebug("Action {action} added", action.Name);
         }
-
-        if (module.IsDefined(typeof(StateAttribute)))
+        
+        var stateHandlers = module.GetMethods().Where(m => m.IsDefined(typeof(StateHandlerAttribute)));
+        if (stateHandlers.Count() == 1 && groupName == "/") throw new Exception($"State handler must be in Group");
+        if (stateHandlers.Count() > 1) throw new Exception($"Multiple state handlers defined in {module} ({groupName})");
+        if (stateHandlers.Count() == 1)
         {
-            var methods = module.GetMethods().Where(m => m.IsDefined(typeof(StateHandlerAttribute)));
-            if (methods.Count() == 0) throw new Exception($"No state handler defined in {module}");
-            if (methods.Count() > 1) throw new Exception($"Multiple state handlers defined in {module}");
-
-            var stateName = module.GetCustomAttribute<StateAttribute>().Name;
-            Type type = module;
-            while (type.IsNested)
-            {
-                type = type.DeclaringType;
-                if (type.IsDefined(typeof(StateAttribute)))
-                {
-                    stateName = type.GetCustomAttribute<StateAttribute>().Name + "/" + stateName;
-                }
-            }
-
             var stateInfo = new StateInfo()
             {
                 Module = moduleInfo,
-                MethodInfo = methods.First(),
-                Name = stateName,
-                Summary = methods.First().GetCustomAttribute<SummaryAttribute>()?.Summary ?? "",
-                RunMode = methods.First().GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync,
-                ParseArgs = methods.First().GetCustomAttribute<StateHandlerAttribute>().ParseArgs,
+                MethodInfo = stateHandlers.First(),
+                Name = groupName,
+                Summary = stateHandlers.First().GetCustomAttribute<SummaryAttribute>()?.Summary ?? "",
+                RunMode = stateHandlers.First().GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync,
+                ParseArgs = stateHandlers.First().GetCustomAttribute<StateHandlerAttribute>().ParseArgs,
             };
 
-            if (!_states.TryAdd("/" + stateName, stateInfo))
+            if (!_states.TryAdd(groupName, stateInfo))
             {
-                throw new Exception($"State with name {stateName} already exists");
+                throw new Exception($"State handler in group {groupName} already exists");
             }
 
-            _logger.LogDebug("State {state} added", stateName);
+            _logger.LogDebug("State handler in group {state} added", groupName);
         }
+
+        var callbackQueryHandlers = module
+            .GetMethods()
+            .Where(m => m.IsDefined(typeof(CallbackQueryHandlerAttribute)))
+            ?.Select(m => new CallbackQueryHandlerInfo()
+            {
+                Module = moduleInfo,
+                MethodInfo = m,
+                Name = groupName + "/" + m.GetCustomAttribute<CallbackQueryHandlerAttribute>().Path,
+                Summary = m.GetCustomAttribute<SummaryAttribute>()?.Summary ?? "",
+                RunMode = m.GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync,
+                Attributes = m.GetCustomAttribute<CallbackQueryHandlerAttribute>(),
+            });
+
+        foreach (var callbackQueryHandlerInfo in callbackQueryHandlers)
+        {
+            if (_callbackQueryHandlers.Count(c => c.Name == callbackQueryHandlerInfo.Name) > 0)
+            {
+                throw new Exception($"Callback query handler with path {callbackQueryHandlerInfo.Name} already exists");
+            }
+
+            _callbackQueryHandlers.Add(callbackQueryHandlerInfo);
+            _logger.LogDebug("Callback query handler {path} added", callbackQueryHandlerInfo.Name);
+        }
+        
 
         foreach (var nestedType in module
                      .GetNestedTypes()
                      .Where(t => t.IsNestedPublic && !t.IsAbstract && t.IsSubclassOf(typeof(BaseTelegramModule)))
-                 )
+                )
         {
             AddModuleInternal(nestedType);
         }

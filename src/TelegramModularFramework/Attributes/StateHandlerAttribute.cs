@@ -15,10 +15,9 @@ public class StateHandlerAttribute : Attribute
     {
         ParseArgs = false;
     }
-    
-    public StateHandlerAttribute(bool parseArgs)
+
+    public StateHandlerAttribute(bool parseArgs = false)
     {
         ParseArgs = parseArgs;
     }
 }
-

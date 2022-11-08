@@ -15,7 +15,7 @@ public class SampleStates: BaseTelegramModule
         await ChangeState("sample");
     }
     
-    [State("sample")]
+    [Group("sample")]
     public class SampleState: BaseTelegramModule
     {
         [StateHandler]
@@ -27,7 +27,7 @@ public class SampleStates: BaseTelegramModule
             ChangeState("age");
         }
         
-        [State("age")]
+        [Group("age")]
         public class SampleAgeState: BaseTelegramModule
         {
             [StateHandler(parseArgs:true)]

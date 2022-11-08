@@ -6,4 +6,5 @@ public class ModuleInfo
 {
     public Type Type { get; set; }
     public ObjectFactory Factory { get; set; }
+    public string Group { get; set; }
 }

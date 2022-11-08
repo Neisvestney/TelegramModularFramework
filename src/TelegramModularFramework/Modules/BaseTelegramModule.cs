@@ -5,18 +5,17 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramModularFramework.Modules;
 
-
 /// <summary>
 /// Base class for all modules
 /// </summary>
-public class  BaseTelegramModule
+public class BaseTelegramModule
 {
     /// <summary>
     /// Current context with client, update object and etc
     /// </summary>
     public ModuleContext Context { get; set; }
 
-    
+
     /// <summary>
     /// Replays with message to the chat from context
     /// </summary>
@@ -49,7 +48,7 @@ public class  BaseTelegramModule
     /// A cancellation token that can be used by other objects or threads to receive notice of cancellation
     /// </param>
     /// <returns>On success, the sent <see cref="Message"/> is returned.</returns>
-    public async Task<Message> ReplyAsync(
+    public Task<Message> ReplyAsync(
         string text,
         ParseMode? parseMode = default,
         IEnumerable<MessageEntity>? entities = default,
@@ -61,8 +60,8 @@ public class  BaseTelegramModule
         IReplyMarkup? replyMarkup = default,
         CancellationToken cancellationToken = default)
     {
-        return await Context.Client.SendTextMessageAsync(
-            Context.Update.Message.Chat.Id,
+        return Context.Client.SendTextMessageAsync(
+            Context.Update.Message?.Chat.Id ?? Context.Update.CallbackQuery.Message?.Chat.Id,
             text,
             parseMode,
             entities,
@@ -71,6 +70,45 @@ public class  BaseTelegramModule
             protectContent,
             replyToMessageId,
             allowSendingWithoutReply,
+            replyMarkup,
+            cancellationToken
+        );
+    }
+
+    public Task EditInlineMessageTextAsync(
+        string text,
+        ParseMode? parseMode = default,
+        IEnumerable<MessageEntity>? entities = default,
+        bool? disableWebPagePreview = default,
+        InlineKeyboardMarkup? replyMarkup = default,
+        CancellationToken cancellationToken = default)
+    {
+        return Context.Client.EditMessageTextAsync(
+            Context.Update.CallbackQuery.InlineMessageId,
+            text,
+            parseMode,
+            entities,
+            disableWebPagePreview,
+            replyMarkup,
+            cancellationToken
+        );
+    }
+    
+    public Task EditMessageTextAsync(
+        string text,
+        ParseMode? parseMode = default,
+        IEnumerable<MessageEntity>? entities = default,
+        bool? disableWebPagePreview = default,
+        InlineKeyboardMarkup? replyMarkup = default,
+        CancellationToken cancellationToken = default)
+    {
+        return Context.Client.EditMessageTextAsync(
+            Context.Update.Message?.Chat.Id ?? Context.Update.CallbackQuery.Message.Chat.Id,
+            Context.Update.Message?.MessageId ?? Context.Update.CallbackQuery.Message.MessageId,
+            text,
+            parseMode,
+            entities,
+            disableWebPagePreview,
             replyMarkup,
             cancellationToken
         );
