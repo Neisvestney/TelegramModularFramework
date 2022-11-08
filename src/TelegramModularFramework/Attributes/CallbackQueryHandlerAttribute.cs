@@ -1,5 +1,8 @@
 ﻿namespace TelegramModularFramework.Attributes;
 
+/// <summary>
+/// Registers method that used for handling <see cref="Telegram.Bot.Types.Enums.UpdateType.CallbackQuery"/> updates
+/// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public class CallbackQueryHandlerAttribute: Attribute
 {

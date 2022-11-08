@@ -3,6 +3,9 @@ using TelegramModularFramework.Services.Utils;
 
 namespace TelegramModularFramework.Services.Exceptions;
 
+/// <summary>
+/// Some parameter value missing in path
+/// </summary>
 public class CallbackQueryHandlerBadPath: BaseCommandException
 {
     public IEnumerable<PathPart> PathParts { get; set; }

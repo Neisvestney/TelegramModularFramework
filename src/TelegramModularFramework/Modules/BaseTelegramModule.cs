@@ -75,6 +75,29 @@ public class BaseTelegramModule
         );
     }
 
+    /// <summary>
+    /// Use this method to edit text and game messages.
+    /// </summary>
+    /// <param name="text">New text of the message, 1-4096 characters after entities parsing</param>
+    /// <param name="parseMode">
+    /// Mode for parsing entities in the new caption. See
+    /// <a href="https://core.telegram.org/bots/api#formatting-options">formatting</a> options for
+    /// more details
+    /// </param>
+    /// <param name="entities">
+    /// List of special entities that appear in message text, which can be specified instead
+    /// of <see cref="ParseMode"/>
+    /// </param>
+    /// <param name="disableWebPagePreview">Disables link previews for links in this message</param>
+    /// <param name="replyMarkup">
+    /// Additional interface options. An <see cref="InlineKeyboardMarkup">inline keyboard</see>,
+    /// <see cref="ReplyKeyboardMarkup">custom reply keyboard</see>, instructions to
+    /// <see cref="ReplyKeyboardRemove">remove reply keyboard</see> or to
+    /// <see cref="ForceReplyMarkup">force a reply</see> from the user
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A cancellation token that can be used by other objects or threads to receive notice of cancellation
+    /// </param>
     public Task EditInlineMessageTextAsync(
         string text,
         ParseMode? parseMode = default,
@@ -94,7 +117,31 @@ public class BaseTelegramModule
         );
     }
     
-    public Task EditMessageTextAsync(
+    /// <summary>
+    /// Use this method to edit text and game messages.
+    /// </summary>
+    /// <param name="text">New text of the message, 1-4096 characters after entities parsing</param>
+    /// <param name="parseMode">
+    /// Mode for parsing entities in the new caption. See
+    /// <a href="https://core.telegram.org/bots/api#formatting-options">formatting</a> options for
+    /// more details
+    /// </param>
+    /// <param name="entities">
+    /// List of special entities that appear in message text, which can be specified instead
+    /// of <see cref="ParseMode"/>
+    /// </param>
+    /// <param name="disableWebPagePreview">Disables link previews for links in this message</param>
+    /// <param name="replyMarkup">
+    /// Additional interface options. An <see cref="InlineKeyboardMarkup">inline keyboard</see>,
+    /// <see cref="ReplyKeyboardMarkup">custom reply keyboard</see>, instructions to
+    /// <see cref="ReplyKeyboardRemove">remove reply keyboard</see> or to
+    /// <see cref="ForceReplyMarkup">force a reply</see> from the user
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A cancellation token that can be used by other objects or threads to receive notice of cancellation
+    /// </param>
+    /// <returns>On success the edited <see cref="Message"/> is returned.</returns>
+    public Task<Message> EditMessageTextAsync(
         string text,
         ParseMode? parseMode = default,
         IEnumerable<MessageEntity>? entities = default,
