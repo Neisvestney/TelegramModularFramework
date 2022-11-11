@@ -19,6 +19,7 @@ public class CommandAttribute: Attribute
     
     public CommandAttribute(string name = null, bool hideFromList = false)
     {
+        if (name != null && name.Contains(' ')) throw new ArgumentException("Command name cannot contain spaces");
         Name = name;
         HideFromList = hideFromList;
     }

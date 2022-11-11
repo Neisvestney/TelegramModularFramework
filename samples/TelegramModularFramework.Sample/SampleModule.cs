@@ -10,10 +10,12 @@ namespace TelegramModularFramework.Sample;
 public class SampleModule: BaseTelegramModule
 {
     private readonly TelegramModulesService _modulesService;
+    private readonly SampleService _service;
 
-    public SampleModule(TelegramModulesService modulesService)
+    public SampleModule(TelegramModulesService modulesService, SampleService service)
     {
         _modulesService = modulesService;
+        _service = service;
     }
 
     [Command]
@@ -27,7 +29,7 @@ public class SampleModule: BaseTelegramModule
             "Enter Name",
         });
         keyboard.ResizeKeyboard = true;
-        await ReplyAsync($"Welcome!", replyMarkup: keyboard);
+        await ReplyAsync($"Welcome! {_service.Text}", replyMarkup: keyboard);
     }
 
     [Command("test")]

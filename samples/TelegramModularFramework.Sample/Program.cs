@@ -28,6 +28,7 @@ try
         .ConfigureServices(services =>
         {
             services.AddHostedService<TelegramHandler>();
+            services.AddScoped<SampleService>();
         })
         .Build();
 

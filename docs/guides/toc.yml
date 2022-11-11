@@ -1,2 +1,26 @@
 - name: Introduction
-  href: intro.md
+  topicUid: Guides.Introduction
+- name: Getting Started
+  items:
+    - name: Installation
+      topicUid: Guides.GettingStarted.Installation
+    - name: Simple Bot
+      topicUid: Guides.GettingStarted.SimpleBot
+- name: Telegram Module
+  topicUid: Guides.TelegramModule
+- name: Handlers
+  items:
+    - name: Introduction
+      topicUid: Guides.Handlers.Introduction
+    - name: Commands
+      topicUid: Guides.Handlers.Commands
+    - name: Actions
+      topicUid: Guides.Handlers.Actions
+    - name: States
+      topicUid: Guides.Handlers.States
+    - name: Callback Queries
+      topicUid: Guides.Handlers.CallbackQueries
+- name: TypeReaders
+  topicUid: Guides.TypeReaders
+- name: Dependency Injection
+  topicUid: Guides.DependencyInjection
