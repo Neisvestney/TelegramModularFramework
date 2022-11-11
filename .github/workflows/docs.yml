@@ -19,7 +19,7 @@ jobs:
       - name: Unzip DocFX  
         run: unzip docfx.zip -d ./docfx
       - name: Run DocFX
-        run: mono ./docfx/docfx.exec ./docs/docfx.json
+        run: mono ./docfx/docfx.exe ./docs/docfx.json
       - name: Upload build
         uses: actions/upload-pages-artifact@v1
         with:
