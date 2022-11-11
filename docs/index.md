@@ -4,9 +4,10 @@ title: Home
 ---
 
 # Telegram Modular Framework
+[![Nuget](https://img.shields.io/nuget/v/TelegramModularFramework)](https://www.nuget.org/packages/TelegramModularFramework/)  
 Framework for writting telegram bots with [Telegram.Bots](https://github.com/TelegramBots) and modules
 > [!WARNING]
-> **In development.** No nuget package. Will be available soon.
+> **In development.**
 # Quick start
 - @Guides.GettingStarted.Installation
 # Features
