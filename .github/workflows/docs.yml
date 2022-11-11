@@ -1,0 +1,44 @@
+﻿name: Docs
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install mono
+        run: sudo apt-get install mono-runtime mono-devel msbuild
+      - name: Download DocFX  
+        run: wget https://github.com/dotnet/docfx/releases/download/v2.59.4/docfx.zip
+      - name: Unzip DocFX  
+        run: unzip docfx.zip -d ./docfx
+      - name: Run DocFX
+        run: mono ./docfx/docfx.exec ./docs/docfx.json
+      - name: Upload build
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './docs/_site'
+  deploy:
+    name: Deploy
+    needs: build
+
+    permissions:
+      pages: write   
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+
