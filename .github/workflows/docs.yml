@@ -11,7 +11,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install mono
         run: sudo apt-get install mono-runtime mono-devel msbuild
       - name: Download DocFX  
