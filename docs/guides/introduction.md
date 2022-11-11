@@ -5,6 +5,8 @@ uid: Guides.Introduction
 
 # Introduction
 
+[Nuget](https://www.nuget.org/packages/TelegramModularFramework/) package `TelegramModularFramework`
+
 ## Quick start
 
 @Guides.GettingStarted.Installation

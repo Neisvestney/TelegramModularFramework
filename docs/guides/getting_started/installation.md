@@ -4,5 +4,8 @@ uid: Guides.GettingStarted.Installation
 ---
 
 # Installation
+
+Nuget package `TelegramModularFramework`
+
 > [!WARNING]
-> **In development.** No nuget package. Will be available soon.
+> **In development.**
