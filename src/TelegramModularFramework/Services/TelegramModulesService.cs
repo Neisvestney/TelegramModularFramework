@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,11 +31,11 @@ public class TelegramModulesService
     private readonly IStateHolder _stateHolder;
 
     private List<ModuleInfo> _modules = new();
-    
+
     /// <summary>
     /// List of all loaded modules
     /// </summary>
-    public ImmutableArray<ModuleInfo> Modules => ImmutableArray.Create(_modules.ToArray());
+    public List<ModuleInfo> Modules => _modules.ToList();
 
     private Dictionary<string, CommandInfo> _commands = new();
     
@@ -213,7 +212,7 @@ public class TelegramModulesService
     {
         var args = update.Message.Text!.Split(' ');
         var commandString = args[0].Replace($"@{_host.User.Username}", "");
-        var argsString = string.Join(' ', args.Skip(1).ToArray());
+        var argsString = string.Join(" ", args.Skip(1).ToList());
         var context = new ModuleContext(botClient, this, update, argsString, commandString, null);
 
         if (_commands.TryGetValue(commandString, out var commandInfo))
@@ -437,13 +436,13 @@ public class TelegramModulesService
     {
         // /sample/{data:*} => /sample/*
 
-        return "/" + string.Join('/', ParsePath(path).Select(p => p.Template));
+        return "/" + string.Join("/", ParsePath(path).Select(p => p.Template));
     }
 
     private IEnumerable<PathPart> ParsePath(string path)
     {
         return path
-            .Split("/")
+            .Split('/')
             .Skip(1) // Starts from '/'
             .Select(p => new
             {
@@ -460,7 +459,7 @@ public class TelegramModulesService
             {
                 Dynamic = p.Match.Success,
                 Name = p.Split?[0] ?? p.Path,
-                Template = p.Match.Success ? (p.Split?.Length > 0 ? string.Join(':', p.Split.Skip(1)) : "*") : p.Path
+                Template = p.Match.Success ? (p.Split?.Length > 0 ? string.Join(":", p.Split.Skip(1)) : "*") : p.Path
             });
         
         // return Regex
@@ -480,7 +479,7 @@ public class TelegramModulesService
         var parametersInfos = callbackQueryHandlerInfo.MethodInfo.GetParameters();
         var parameters = new object[parametersInfos.Length];
 
-        var dataSplit = data.Split("/").Skip(1).ToArray();
+        var dataSplit = data.Split('/').Skip(1).ToArray();
         var pathParts = ParsePath(callbackQueryHandlerInfo.Name).ToArray();
 
         foreach (var parameterInfo in parametersInfos)
@@ -570,9 +569,13 @@ public class TelegramModulesService
 
         foreach (var command in commands)
         {
-            if (!_commands.TryAdd("/" + command.Name, command))
+            if (_commands.ContainsKey("/" + command.Name))
             {
                 throw new Exception($"Command with name {command.Name} already exists");
+            }
+            else
+            {
+                _commands.Add("/" + command.Name, command);
             }
 
             _logger.LogDebug("Command {command} added", command.Name);
@@ -594,9 +597,13 @@ public class TelegramModulesService
 
         foreach (var action in actions)
         {
-            if (!_actions.TryAdd(action.Name, action))
+            if (_actions.ContainsKey(action.Name))
             {
                 throw new Exception($"Action with name {action.Name} already exists");
+            }
+            else
+            {
+                _actions.Add(action.Name, action);
             }
 
             _logger.LogDebug("Action {action} added", action.Name);
@@ -617,9 +624,13 @@ public class TelegramModulesService
                 ParseArgs = stateHandlers.First().GetCustomAttribute<StateHandlerAttribute>().ParseArgs,
             };
 
-            if (!_states.TryAdd(groupName, stateInfo))
+            if (_states.ContainsKey(groupName))
             {
                 throw new Exception($"State handler in group {groupName} already exists");
+            }
+            else
+            {
+                _states.Add(groupName, stateInfo);
             }
 
             _logger.LogDebug("State handler in group {state} added", groupName);
