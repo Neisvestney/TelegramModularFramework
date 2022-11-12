@@ -104,5 +104,5 @@ public class Module: BaseTelegramModule
 }
 ```
 
-Then add telegram api key with `dotnet user-secrets set Telegram:Token "Token""`  
+Then add telegram api key with `dotnet user-secrets set Telegram:Token "Token"`  
 And run your app

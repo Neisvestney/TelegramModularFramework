@@ -9,18 +9,14 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install mono
-        run: sudo apt-get install mono-runtime mono-devel msbuild
-      - name: Download DocFX  
-        run: wget https://github.com/dotnet/docfx/releases/download/v2.59.4/docfx.zip
-      - name: Unzip DocFX  
-        run: unzip docfx.zip -d ./docfx
+      - name: Install DocFX
+        run: choco install docfx -y
       - name: Run DocFX
-        run: mono ./docfx/docfx.exe ./docs/docfx.json
+        run: docfx ./docs/docfx.json
       - name: Upload build
         uses: actions/upload-pages-artifact@v1
         with:
