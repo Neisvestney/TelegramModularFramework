@@ -15,6 +15,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Install DocFX
         run: choco install docfx -y
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.x.x'
+      - name: Restore NuGet
+        run: dotnet restore 
       - name: Run DocFX
         run: docfx ./docs/docfx.json
       - name: Upload build
