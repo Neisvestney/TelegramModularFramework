@@ -4,12 +4,13 @@ title: Home
 ---
 
 # Telegram Modular Framework
-[![Nuget](https://img.shields.io/nuget/v/TelegramModularFramework)](https://www.nuget.org/packages/TelegramModularFramework/)  
-Framework for writting telegram bots with [Telegram.Bots](https://github.com/TelegramBots) and modules
+[![Nuget](https://img.shields.io/nuget/v/TelegramModularFramework)](https://www.nuget.org/packages/TelegramModularFramework/)
+[![Source](https://img.shields.io/badge/source-github-green)](https://github.com/Neisvestney/TelegramModularFramework/)  
+Framework for writing telegram bots with [Telegram.Bots](https://github.com/TelegramBots) and modules
 > [!WARNING]
 > **In development.**
 # Quick start
-- @Guides.GettingStarted.Installation
+- @Guides.GettingStarted.ProjectCreation
 # Features
 - [Commands](xref:Guides.Handlers.Commands)
     - Handling text messages starting with `/`

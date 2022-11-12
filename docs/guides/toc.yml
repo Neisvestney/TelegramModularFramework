@@ -2,6 +2,8 @@
   topicUid: Guides.Introduction
 - name: Getting Started
   items:
+    - name: Project Creation
+      topicUid: Guides.GettingStarted.ProjectCreation
     - name: Installation
       topicUid: Guides.GettingStarted.Installation
     - name: Simple Bot

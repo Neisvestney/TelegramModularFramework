@@ -3,21 +3,20 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Neisvestney/TelegramModularFramework/Docs?label=docs)](https://neisvestney.github.io/TelegramModularFramework/)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Neisvestney/TelegramModularFramework/Publish?label=publish)](https://github.com/Neisvestney/TelegramModularFramework/actions/workflows/publish.yaml)
 
-Framework for writting telegram bots with [Telegram.Bots](https://github.com/TelegramBots) and modules
+Framework for writing telegram bots with [Telegram.Bots](https://github.com/TelegramBots) and modules
 > **In development**.
-
-Nuget package `TelegramModularFramework`
 
 ## Documentation
 - [Github pages](https://neisvestney.github.io/TelegramModularFramework/)
 - [Docs source](https://github.com/Neisvestney/TelegramModularFramework/tree/master/docs)
 ## Installation
-- There will be nuget
+- Add to your [C# Worker Service](https://learn.microsoft.com/en-us/dotnet/core/extensions/workers) or Asp.Net project nuget package `TelegramModularFramework`
+- Or see [Installation Guide](https://neisvestney.github.io/TelegramModularFramework/guides/getting_started/installation.html)
 ## Features
 - Commands
   - Handling text messages starting with `/`
   - Parsing strings to method arguments
-  - Authomatic sets bot commands list
+  - Automatic sets bot commands list
 - Actions
   - Handling other text messages
 - States
@@ -26,11 +25,11 @@ Nuget package `TelegramModularFramework`
   - Nested states
 - Callback Queries
   - Handling queries by paths with dynamic path parameters
-  - Parameters type convertion
+  - Parameters type converting
 - [.NET Generic Host](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host)
 - Dependency injection in modules
 - Long pooling
-- ~~WebHooks~~ _(In develompment)_
-- ~~Localization~~ _(In develompment)_
+- ~~WebHooks~~ _(In development)_
+- ~~Localization~~ _(In development)_
 ## Samples
 - [Commands, actions, stages and callbacks](https://github.com/Neisvestney/TelegramModularFramework/tree/master/samples/TelegramModularFramework.Sample)

@@ -9,7 +9,7 @@ uid: Guides.Introduction
 
 ## Quick start
 
-@Guides.GettingStarted.Installation
+@Guides.GettingStarted.ProjectCreation
 
 ## Services
 
@@ -26,8 +26,8 @@ await host.RunAsync();
 Asp Net host can be used too with `builder.Host`  
 To add framework to host configure it with:
 
-- @TelegramModularFramework.TelegramBotHostBuilderExtensions.ConfigureTelegramBotHost  
-  Used to add basics services add start recieving updates and routing events with
+- [ConfigureTelegramBotHost](xref:TelegramModularFramework.TelegramBotHostBuilderExtensions.ConfigureTelegramBotHost(Microsoft.Extensions.Hosting.IHostBuilder,Action{Microsoft.Extensions.Hosting.HostBuilderContext,TelegramModularFramework.Services.TelegramBotHostConfiguration}))   
+  Used to add basics services add start receiving updates and routing events with
   @TelegramModularFramework.Services.TelegramBotEvents
 
 ```csharp
@@ -37,7 +37,7 @@ host.ConfigureTelegramBotHost((context, c) =>
 })
 ```
 
-- @TelegramModularFramework.TelegramBotHostBuilderExtensions.AddTelegramModulesService  
+- [AddTelegramModulesService](xref:TelegramModularFramework.TelegramBotHostBuilderExtensions.AddTelegramModulesService(Microsoft.Extensions.Hosting.IHostBuilder,Action{Microsoft.Extensions.Hosting.HostBuilderContext,TelegramModularFramework.Services.TelegramModulesConfiguration}))  
   Used to add [Modules](xref:Guides.TelegramModule) and process updates
 
 ```csharp

@@ -9,6 +9,12 @@
 
     <PropertyGroup>
         <Version>0.5.3</Version>
+        <Authors>Neisvestney</Authors>
+        <Description>Framework for writing telegram bots with Telegram.Bots library and modules</Description>
+        <PackageTags>telegram;framework;net6.0;netstandard2.0;di;modules</PackageTags>
+    </PropertyGroup>
+    
+    <PropertyGroup>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
