@@ -12,7 +12,7 @@ Query data value used as path to route event to handler
 
 ## Adding callback query handler
 
-Create in your @Guides.TelegramModule public medthod
+Create in your @Guides.TelegramModule public method
 with @TelegramModularFramework.Attributes.CallbackQueryHandlerAttribute
 and pass path argument to it without starting and ending `/`  
 You can add dynamic parts with `{name:regex}` format  
@@ -49,12 +49,13 @@ Result path is `/sample/test`
 
 ## Arguments
 
-All dynamic parts from path can be passed to medthod by its names  
-Values convertes with @Guides.TypeReadrs
+All dynamic parts from path can be passed to method by its names  
+Path query params also parsed and can be passed   
+Values converts with @Guides.TypeReaders
 
 ## Sending buttons
 
-Sending buttons done by sending replaty message with repltyMarkup in
+Sending buttons done by sending replay message with replyMarkup in
 other [Handler](xref:Guides.Handlers.Introduction)
 ```csharp
 var replyMarkup = new InlineKeyboardMarkup(new []
@@ -86,7 +87,7 @@ to handle command post execution
 
 ### Exceptions
 
-If callback executed unsuccesfully handle @TelegramModularFramework.Modules.Result.Exception  
+If callback executed unsuccessfully handle @TelegramModularFramework.Modules.Result.Exception  
 Possible exception:
 
 - @TelegramModularFramework.Services.Exceptions.UnknownCommand

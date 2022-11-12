@@ -6,7 +6,7 @@ uid: Guides.GettingStarted.SimpleBot
 # Simple Bot
 
 Simple bot with one command  
-Make sure that you [installed all required dependices](xref:Guides.GettingStarted.Installation) and created project with 
+Make sure that you [installed all required dependencies](xref:Guides.GettingStarted.Installation) and created project with 
 [Worker Service Template](https://learn.microsoft.com/en-us/dotnet/core/extensions/workers)
 
 ## Code

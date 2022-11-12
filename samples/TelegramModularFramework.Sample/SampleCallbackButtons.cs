@@ -18,7 +18,7 @@ public class SampleCallbackButtons: BaseTelegramModule
             InlineKeyboardButton.WithCallbackData("1", "/page/set/1"),    
             InlineKeyboardButton.WithCallbackData("2", "/page/set/2"),    
             InlineKeyboardButton.WithCallbackData("Next", "/page/next"),    
-            InlineKeyboardButton.WithCallbackData("Test", "/page/test/1/2"),    
+            InlineKeyboardButton.WithCallbackData("Test", "/page/test/1/2?query=test"),    
         });
 
         await ReplyAsync("Select page:", replyMarkup: replyMarkup);
@@ -46,9 +46,9 @@ public class SampleCallbackButtons: BaseTelegramModule
         }
         
         [CallbackQueryHandler("test/{index:*}/{other:*}")]
-        public async Task HandleTest(string index, string other)
+        public async Task HandleTest(string index, string other, string query)
         {
-            await EditMessageTextAsync($"Test: {index} {other}");
+            await EditMessageTextAsync($"Test: {index} {other} {query}");
         }
     }
 }

@@ -6,11 +6,11 @@ uid: Guides.Handlers.Actions
 # Actions
 
 Common text messages  
-Can be combinated with [Keyboards](https://telegrambots.github.io/book/2/reply-markup.html#single-row-keyboard-markup)
+Can be combined with [Keyboards](https://telegrambots.github.io/book/2/reply-markup.html#single-row-keyboard-markup)
 
 ## Adding action
 
-Create in your @Guides.TelegramModule public medthod
+Create in your @Guides.TelegramModule public method
 with @TelegramModularFramework.Attributes.ActionAttribute
 
 ```csharp

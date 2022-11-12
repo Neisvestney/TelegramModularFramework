@@ -25,7 +25,7 @@ public class SampleModule: BaseTelegramModule
 }
 ```
 
-By default command name generates from method name `CommandName -> /commandname`  
+By default, command name generates from method name `CommandName -> /commandname`  
 You can specify name by passing `name` argument to @TelegramModularFramework.Attributes.CommandAttribute  
 Name cannot contain spaces
 
@@ -48,7 +48,7 @@ public async Task Command(int number, float numberFloat, double numberDouble, bo
 
 If string contains spaces it can be wrapped in quotes
 `/command "String with spaces"`  
-Avalible typereaders and guide how to make custom one are present in @Guides.TypeReadrs
+Available typereaders and guide how to make custom one are present in @Guides.TypeReaders
 
 ## Run Mode
 
@@ -82,7 +82,7 @@ to handle command post execution
 
 ### Exceptions
 
-If command executed unsuccesfully handle @TelegramModularFramework.Modules.Result.Exception  
+If command executed unsuccessfully handle @TelegramModularFramework.Modules.Result.Exception  
 Possible exception:
 
 - @TelegramModularFramework.Services.Exceptions.UnknownCommand

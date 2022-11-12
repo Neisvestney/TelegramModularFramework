@@ -7,7 +7,7 @@ uid: Guides.TypeReaders
 
 TypeReaders used to convert string arguments to destination type 
 
-## Avaliable type readers
+## Available type readers
 - @TelegramModularFramework.Services.TypeReaders.StringTypeReader
 - @TelegramModularFramework.Services.TypeReaders.IntTypeReader
 - @TelegramModularFramework.Services.TypeReaders.BooleanTypeReader

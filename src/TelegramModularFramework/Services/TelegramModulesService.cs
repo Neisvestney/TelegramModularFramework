@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -479,18 +480,31 @@ public class TelegramModulesService
         var parametersInfos = callbackQueryHandlerInfo.MethodInfo.GetParameters();
         var parameters = new object[parametersInfos.Length];
 
-        var dataSplit = data.Split('/').Skip(1).ToArray();
+        var dataSplit = data.Split('?')[0].Split('/').Skip(1).ToArray();
         var pathParts = ParsePath(callbackQueryHandlerInfo.Name).ToArray();
+        var query = HttpUtility.ParseQueryString("?" + data.Split('?')[1]);
 
         foreach (var parameterInfo in parametersInfos)
         {
+            string value;
             var i = Array.FindIndex(pathParts, p => p.Dynamic && p.Name.ToLower() == parameterInfo.Name.ToLower());
-            if (i == -1) throw new CallbackQueryHandlerBadPath(pathParts, parameterInfo, data);
+            if (i == -1)
+            {
+                value = query[parameterInfo.Name.ToLower()];
+                if (value == null)
+                {
+                    throw new CallbackQueryHandlerBadPath(pathParts, parameterInfo, data);
+                }
+            }
+            else
+            {
+                value = dataSplit[i];
+            }
             
             var reader = _provider
                 .GetServices<ITypeReader>()
                 .First(r => r.Type == parameterInfo.ParameterType);
-            var read = await reader.ReadTypeAsync(module.Context, dataSplit[i]);
+            var read = await reader.ReadTypeAsync(module.Context, value);
             if (!read.Success)
             {
                 throw new TypeConvertException(read.ErrorReason, parameterInfo, i);

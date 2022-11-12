@@ -78,7 +78,7 @@ to handle state post execution
 
 ### Exceptions
 
-If state executed unsuccesfully handle @TelegramModularFramework.Modules.Result.Exception  
+If state executed unsuccessfully handle @TelegramModularFramework.Modules.Result.Exception  
 Possible exception:
 
 - @TelegramModularFramework.Services.Exceptions.UnknownCommand

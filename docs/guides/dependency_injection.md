@@ -5,7 +5,7 @@ uid: Guides.DependencyInjection
 
 # Dependency Injection
 
-All [Modules](xref:Guides.TelegramModule) has DI support and activates through [ActivatorUtilities](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.activatorutilities?view=dotnet-plat-ext-6.0)
+All [Modules](xref:Guides.TelegramModule) have DI support and activates through [ActivatorUtilities](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.activatorutilities?view=dotnet-plat-ext-6.0)
 with scoped service provider
 
 ```csharp

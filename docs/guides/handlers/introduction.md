@@ -7,7 +7,7 @@ uid: Guides.Handlers.Introduction
 
 Framework handles different types of messages and events  
 All handlers must be defined in [Modules](xref:Guides.TelegramModule)  
-Avalibe handlers:
+Available handlers:
 
 - @Guides.Handlers.Commands
 - @Guides.Handlers.Actions

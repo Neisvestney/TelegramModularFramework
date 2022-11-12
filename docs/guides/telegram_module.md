@@ -26,7 +26,7 @@ Other methods in [Api Rerefence](xref:TelegramModularFramework.Modules.BaseTeleg
 ## Groups
 
 > [!WARNING]
-> **In development.** Commands and actions dont respect groups
+> **In development.** Commands and actions don't respect groups
 
 To group your [Handlers](xref:Guides.Handlers.Introduction) you can nest modeles with
 @TelegramModularFramework.Attributes.GroupAttribute
