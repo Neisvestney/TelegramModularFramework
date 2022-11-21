@@ -1,4 +1,5 @@
 ﻿using TelegramModularFramework.Modules;
+using TelegramModularFramework.Resources;
 
 namespace TelegramModularFramework.Services.TypeReaders;
 
@@ -14,7 +15,7 @@ public class IntTypeReader: ITypeReader
         }
         else
         {
-            return TypeReaderResult.FromError("Not a number");
+            return TypeReaderResult.FromError(TypeReadersMessages.NotANumber);
         }
     }
 }

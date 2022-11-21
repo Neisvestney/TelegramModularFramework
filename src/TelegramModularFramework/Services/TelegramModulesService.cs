@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -12,6 +13,7 @@ using Telegram.Bot.Types.Enums;
 using TelegramModularFramework.Attributes;
 using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services.Exceptions;
+using TelegramModularFramework.Services.Globalization;
 using TelegramModularFramework.Services.State;
 using TelegramModularFramework.Services.TypeReaders;
 using TelegramModularFramework.Services.Utils;
@@ -30,6 +32,7 @@ public class TelegramModulesService
     private readonly ITelegramBotClient _client;
     private readonly TelegramModulesConfiguration _config;
     private readonly IStateHolder _stateHolder;
+    private readonly ICultureInfoUpdater _cultureInfoUpdater;
 
     private List<ModuleInfo> _modules = new();
 
@@ -78,7 +81,7 @@ public class TelegramModulesService
 
     public TelegramModulesService(IServiceProvider provider, ILogger<TelegramModulesService> logger,
         TelegramBotHostedService host, IStringSplitter splitter, ITelegramBotClient client,
-        IOptions<TelegramModulesConfiguration> config, IStateHolder stateHolder)
+        IOptions<TelegramModulesConfiguration> config, IStateHolder stateHolder, ICultureInfoUpdater cultureInfoUpdater)
     {
         _provider = provider;
         _logger = logger;
@@ -87,6 +90,7 @@ public class TelegramModulesService
         _client = client;
         _config = config.Value;
         _stateHolder = stateHolder;
+        _cultureInfoUpdater = cultureInfoUpdater;
     }
 
     /// <summary>
@@ -135,12 +139,13 @@ public class TelegramModulesService
             return false;
         }
     }
-
+    
     private async Task HandleState(ITelegramBotClient botClient, Update update, string state,
         CancellationToken cancellationToken)
     {
         var args = update.Message.Text;
         var context = new ModuleContext(botClient, this, update, args, state, null);
+        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
         if (_states.TryGetValue(state, out var stateInfo))
         {
@@ -215,6 +220,7 @@ public class TelegramModulesService
         var commandString = args[0].Replace($"@{_host.User.Username}", "");
         var argsString = string.Join(" ", args.Skip(1).ToList());
         var context = new ModuleContext(botClient, this, update, argsString, commandString, null);
+        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
         if (_commands.TryGetValue(commandString, out var commandInfo))
         {
@@ -275,6 +281,8 @@ public class TelegramModulesService
     {
         var actionString = update.Message.Text;
         var context = new ModuleContext(botClient, this, update, "", actionString, null);
+        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+        
         if (_actions.TryGetValue(actionString, out var actionInfo))
         {
             _logger.LogDebug("Executing action {action} from {module}", actionInfo.Name, actionInfo.Module.Type.Name);
@@ -383,6 +391,7 @@ public class TelegramModulesService
     private async Task HandleCallbackQuery(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var context = new ModuleContext(botClient, this, update, null, update.CallbackQuery.Data, null);
+        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
         var callbackQueryHandlerInfo = _callbackQueryHandlers
             .Select(c => new

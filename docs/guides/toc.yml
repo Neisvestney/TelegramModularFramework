@@ -24,5 +24,7 @@
       topicUid: Guides.Handlers.CallbackQueries
 - name: TypeReaders
   topicUid: Guides.TypeReaders
+- name: Localization
+  topicUid: Guides.Localization
 - name: Dependency Injection
   topicUid: Guides.DependencyInjection

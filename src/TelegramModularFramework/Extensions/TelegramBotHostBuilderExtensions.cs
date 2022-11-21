@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using TelegramModularFramework.Services;
+using TelegramModularFramework.Services.Globalization;
 using TelegramModularFramework.Services.State;
 using TelegramModularFramework.Services.TypeReaders;
 using TelegramModularFramework.Services.Utils;
@@ -45,9 +46,10 @@ public static class TelegramBotHostBuilderExtensions
         return builder.ConfigureServices((context, services) =>
         {
             services.Configure<TelegramModulesConfiguration>(c => config(context, c));
-            services.AddTransient<IStateHolder>(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.StateHolder);
+            services.AddTransient(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.StateHolder);
             services.AddSingleton<TelegramModulesService>();
             services.AddTransient<IStringSplitter, StringSplitter>();
+            services.AddTransient(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.CultureInfoUpdater);
             services.AddSingleton<ITypeReader, StringTypeReader>();
             services.AddSingleton<ITypeReader, IntTypeReader>();
             services.AddSingleton<ITypeReader, BooleanTypeReader>();

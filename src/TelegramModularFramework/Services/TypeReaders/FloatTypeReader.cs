@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using TelegramModularFramework.Modules;
+using TelegramModularFramework.Resources;
 
 namespace TelegramModularFramework.Services.TypeReaders;
 
@@ -14,7 +15,7 @@ public class FloatTypeReader: ITypeReader
         }
         else
         {
-            return TypeReaderResult.FromError("Not a number");
+            return TypeReaderResult.FromError(TypeReadersMessages.NotAFloat);
         }
     }
 }

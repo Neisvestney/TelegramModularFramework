@@ -1,4 +1,5 @@
 ﻿using TelegramModularFramework.Modules;
+using TelegramModularFramework.Resources;
 
 namespace TelegramModularFramework.Services.TypeReaders;
 
@@ -34,7 +35,7 @@ public class BooleanTypeReader : ITypeReader
         }
         else
         {
-            return TypeReaderResult.FromError("Not a boolean");
+            return TypeReaderResult.FromError(TypeReadersMessages.NotABoolean);
         }
     }
 }

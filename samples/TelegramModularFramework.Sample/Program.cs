@@ -27,6 +27,10 @@ try
         .AddTelegramModulesService((context, c) => {})
         .ConfigureServices(services =>
         {
+            services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
             services.AddHostedService<TelegramHandler>();
             services.AddScoped<SampleService>();
         })

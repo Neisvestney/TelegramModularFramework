@@ -1,7 +1,8 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.Localization;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using TelegramModularFramework.Localization;
 using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services;
 using TelegramModularFramework.Services.Exceptions;
@@ -13,12 +14,14 @@ public class TelegramHandler: BackgroundService
     private readonly TelegramBotEvents _events;
     private readonly ILogger<TelegramHandler> _logger;
     private readonly TelegramModulesService _modulesService;
+    private readonly IStringLocalizer<DefaultErrorMessages> _l;
 
-    public TelegramHandler(TelegramBotEvents events, ILogger<TelegramHandler> logger, TelegramModulesService modulesService)
+    public TelegramHandler(TelegramBotEvents events, ILogger<TelegramHandler> logger, TelegramModulesService modulesService, IStringLocalizer<DefaultErrorMessages> l)
     {
         _events = events;
         _logger = logger;
         _modulesService = modulesService;
+        _l = l;
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,10 +44,10 @@ public class TelegramHandler: BackgroundService
             var errorMessage = result.Exception switch
             {
                 UnknownCommand unknownCommand => context.Update.Message.Chat.Type == ChatType.Private 
-                    ? $"Unknown command **{context.CommandString}**" 
+                    ? _l["UnknownCommand", context.CommandString]
                     : null,
-                BadArgs badArgs => $"Too few arguments",
-                TypeConvertException typeConvert => $"{typeConvert.ErrorReason} at position {typeConvert.Position + 1}",
+                BadArgs badArgs => _l["TooFewArguments"],
+                TypeConvertException typeConvert => _l["TypeConvertException", typeConvert.ErrorReason, typeConvert.Position + 1],
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
@@ -61,7 +64,7 @@ public class TelegramHandler: BackgroundService
         {
             var errorMessage = result.Exception switch
             {
-                UnknownCommand unknownCommand => $"Unknown action **{context.CommandString}**",
+                UnknownCommand unknownCommand =>  _l["UnknownAction", context.CommandString],
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
@@ -78,10 +81,10 @@ public class TelegramHandler: BackgroundService
         {
             var errorMessage = result.Exception switch
             {
-                BadArgs badArgs => $"Too few arguments",
-                TypeConvertException typeConvert => $"{typeConvert.ErrorReason} at position {typeConvert.Position + 1}",
-                ValidationError validation => $"{validation.Message} at position {validation.Position + 1}",
-                UnknownCommand => "Unexpected state value\\! Try again",
+                BadArgs badArgs => _l["TooFewArguments"],
+                TypeConvertException typeConvert => _l["TypeConvertException", typeConvert.ErrorReason, typeConvert.Position + 1],
+                ValidationError validation => _l["ValidationError", validation.Message, validation.Position + 1],
+                UnknownCommand => _l["UnknownState"],
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
@@ -99,7 +102,7 @@ public class TelegramHandler: BackgroundService
             var errorMessage = result.Exception switch
             {
                 UnknownCommand unknownCommand => $"Unknown callback query **{context.CommandString}**",
-                TypeConvertException typeConvert => $"{typeConvert.ErrorReason} at position {typeConvert.Position + 1}",
+                TypeConvertException typeConvert => _l["TypeConvertException", typeConvert.ErrorReason, typeConvert.Position + 1],
                 CallbackQueryHandlerBadPath badPath => $"Parameter {badPath.ParameterInfo.Name} not present in {badPath.Path}",
                 BaseCommandException => result.Exception.Message,
                 _ => null
