@@ -4,8 +4,12 @@ using TelegramModularFramework.Modules;
 
 namespace TelegramModularFramework.Services.Globalization;
 
+/// <summary>
+/// Retrieves <see cref="System.Globalization.CultureInfo"/> from user <see cref="Telegram.Bot.Types.User.LanguageCode"/>
+/// </summary>
 public class UserLanguageCultureInfoUpdater : ICultureInfoUpdater
 {
+    /// <inheritdoc/>
     public CultureInfo GetCultureInfo(ModuleContext context)
     {
         var code = context.Update.Type switch
