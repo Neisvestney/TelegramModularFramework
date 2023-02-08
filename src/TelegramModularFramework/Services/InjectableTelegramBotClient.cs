@@ -3,9 +3,9 @@ using Telegram.Bot;
 
 namespace TelegramModularFramework.Services;
 
-public class InjectableTelegramBotClient: TelegramBotClient
+public class InjectableTelegramBotClient<TOptions>: TelegramBotClient where TOptions : TelegramBotHostConfiguration
 {
-    public InjectableTelegramBotClient(IOptions<TelegramBotHostConfiguration> options): base(options.Value.TelegramBotClientOptions, options.Value.HttpClient)
+    public InjectableTelegramBotClient(IOptions<TOptions> options): base(options.Value.TelegramBotClientOptions, options.Value.HttpClient)
     {
         
     } 

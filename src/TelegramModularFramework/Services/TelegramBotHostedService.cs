@@ -16,15 +16,14 @@ public class TelegramBotHostedService: BackgroundService
     private readonly ITelegramBotClient _botClient;
     private readonly ILogger<TelegramBotHostedService> _logger;
     private readonly TelegramBotEvents _events;
+    private readonly TelegramBotUser _telegramBotUser;
 
-    public User User => _user;
-    private User _user;
-
-    public TelegramBotHostedService(ITelegramBotClient botClient, ILogger<TelegramBotHostedService> logger, TelegramBotEvents events)
+    public TelegramBotHostedService(ITelegramBotClient botClient, ILogger<TelegramBotHostedService> logger, TelegramBotEvents events, TelegramBotUser telegramBotUser)
     {
         _botClient = botClient;
         _logger = logger;
         _events = events;
+        _telegramBotUser = telegramBotUser;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,8 +33,9 @@ public class TelegramBotHostedService: BackgroundService
             AllowedUpdates = Array.Empty<UpdateType>() // receive all update types
         };
 
-        _user = await _botClient.GetMeAsync();
-        _logger.LogInformation("Connected as {username} with id {id}", _user.Username, _user.Id);
+        var user = await _botClient.GetMeAsync(stoppingToken);
+        _telegramBotUser.User = user;
+        _logger.LogInformation("Connected as {username} with id {id}", user.Username, user.Id);
 
         _botClient.StartReceiving(
             updateHandler: _events,

@@ -27,7 +27,7 @@ public class TelegramModulesService
 {
     private readonly IServiceProvider _provider;
     private readonly ILogger<TelegramModulesService> _logger;
-    private readonly TelegramBotHostedService _host;
+    private readonly TelegramBotUser _telegramBotUser;
     private readonly IStringSplitter _splitter;
     private readonly ITelegramBotClient _client;
     private readonly TelegramModulesConfiguration _config;
@@ -80,12 +80,12 @@ public class TelegramModulesService
     public event Func<CallbackQueryHandlerInfo?, ModuleContext, Result, Task> CallbackExecuted;
 
     public TelegramModulesService(IServiceProvider provider, ILogger<TelegramModulesService> logger,
-        TelegramBotHostedService host, IStringSplitter splitter, ITelegramBotClient client,
+        TelegramBotUser telegramBotUser, IStringSplitter splitter, ITelegramBotClient client,
         IOptions<TelegramModulesConfiguration> config, IStateHolder stateHolder, ICultureInfoUpdater cultureInfoUpdater)
     {
         _provider = provider;
         _logger = logger;
-        _host = host;
+        _telegramBotUser = telegramBotUser;
         _splitter = splitter;
         _client = client;
         _config = config.Value;
@@ -217,7 +217,7 @@ public class TelegramModulesService
     private async Task HandleCommand(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var args = update.Message.Text!.Split(' ');
-        var commandString = args[0].Replace($"@{_host.User.Username}", "");
+        var commandString = args[0].Replace($"@{_telegramBotUser.User?.Username}", "");
         var argsString = string.Join(" ", args.Skip(1).ToList());
         var context = new ModuleContext(botClient, this, update, argsString, commandString, null);
         CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);

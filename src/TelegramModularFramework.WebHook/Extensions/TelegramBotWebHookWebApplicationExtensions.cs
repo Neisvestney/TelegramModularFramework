@@ -1,0 +1,48 @@
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using TelegramModularFramework.Services;
+using TelegramModularFramework.WebHook.Models;
+using TelegramModularFramework.WebHook.Services;
+
+namespace TelegramModularFramework.WebHook;
+
+public static class TelegramBotWebHookWebApplicationExtensions
+{
+    public static void MapTelegramWebHook(this WebApplication app)
+    {
+        var options = app.Services.GetRequiredService<IOptions<TelegramBotWebHookHostConfiguration>>().Value;
+        
+        app.MapPost(options.Route,
+            async (HttpRequest request,
+                [FromServices] ILogger<TelegramBotWebHookHostedService> logger,
+                [FromServices] TelegramBotEvents events,
+                [FromServices] ITelegramBotClient botClient,
+                CancellationToken cancellationToken) =>
+            {
+                logger.LogInformation("{Context}", request.Headers);
+
+                if (!request.HasJsonContentType())
+                {
+                    throw new BadHttpRequestException(
+                        "Request content type was not a recognized JSON content type.",
+                        StatusCodes.Status415UnsupportedMediaType);
+                }
+
+                using StreamReader sr = new StreamReader(request.Body);
+
+                var content = await sr.ReadToEndAsync();
+                var update = JsonConvert.DeserializeObject<Update>(content);
+
+                await events.HandleUpdateAsync(botClient, update, cancellationToken);
+
+                return Results.Ok();
+            });
+    }
+}

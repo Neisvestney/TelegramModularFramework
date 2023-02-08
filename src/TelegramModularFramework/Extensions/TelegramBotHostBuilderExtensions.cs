@@ -27,13 +27,24 @@ public static class TelegramBotHostBuilderExtensions
         return builder.ConfigureServices((context, services) =>
         {
             services.Configure<TelegramBotHostConfiguration>(c => config(context, c));
-            services.AddSingleton<ITelegramBotClient, InjectableTelegramBotClient>();
-            services.AddSingleton<TelegramBotEvents>();
-            services.AddSingleton<IUpdateHandler>(s => s.GetService<TelegramBotEvents>());
-            services.AddSingleton<TelegramBotHostedService>();
-            services.AddHostedService(s => s.GetService<TelegramBotHostedService>());
+            services.AddSingleton<ITelegramBotClient, InjectableTelegramBotClient<TelegramBotHostConfiguration>>();
+            services.AddTelegramBotHostBasics();
+            services.AddHostedService<TelegramBotHostedService>();
         });
     }
+    
+    /// <summary>
+    /// Not public API. Used by <see cref="N:TelegramModularFramework.WebHook"/>
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddTelegramBotHostBasics(this IServiceCollection services)
+    {
+        services.AddSingleton<TelegramBotEvents>();
+        services.AddSingleton<IUpdateHandler>(s => s.GetService<TelegramBotEvents>());
+        services.AddSingleton<TelegramBotUser>();
+        return services;
+    } 
     
     /// <summary>
     /// Adds and configures a <see cref="T:TelegramModularFramework.Services.TelegramModulesService"/> along with the required services and basics <see cref="T:TelegramModularFramework.Services.TypeReaders.ITypeReader">TypeReaders</see>.

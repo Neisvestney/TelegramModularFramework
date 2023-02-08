@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+      <UserSecretsId>f268b3af-8ec4-4f44-812b-842ffeb0ede0</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\TelegramModularFramework.WebHook\TelegramModularFramework.WebHook.csproj" />
+    </ItemGroup>
+
+</Project>
