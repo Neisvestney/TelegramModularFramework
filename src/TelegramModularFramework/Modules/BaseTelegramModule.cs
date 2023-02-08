@@ -50,6 +50,7 @@ public class BaseTelegramModule
     /// <returns>On success, the sent <see cref="Message"/> is returned.</returns>
     public Task<Message> ReplyAsync(
         string text,
+        int? messageThreadId = default,
         ParseMode? parseMode = default,
         IEnumerable<MessageEntity>? entities = default,
         bool? disableWebPagePreview = default,
@@ -63,6 +64,7 @@ public class BaseTelegramModule
         return Context.Client.SendTextMessageAsync(
             Context.Update.Message?.Chat.Id ?? Context.Update.CallbackQuery.Message?.Chat.Id,
             text,
+            messageThreadId,
             parseMode,
             entities,
             disableWebPagePreview,

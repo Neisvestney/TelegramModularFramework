@@ -19,5 +19,6 @@ builder.Services.AddHostedService<TelegramHandler>();
 var app = builder.Build();
 
 app.MapTelegramWebHook();
+app.MapGet("/", () => "Hello world");
 
 app.Run();

@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>0.6.0</Version>
+        <Version>0.7.0</Version>
         <Authors>Neisvestney</Authors>
         <Description>Framework for writing telegram bots with Telegram.Bots library and modules</Description>
         <PackageTags>telegram;framework;net6.0;netstandard2.0;di;modules</PackageTags>
@@ -32,7 +32,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-        <PackageReference Include="Telegram.Bot" Version="18.0.0" />
+        <PackageReference Include="Telegram.Bot" Version="19.0.0-preview.2" />
         <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
     </ItemGroup>
 

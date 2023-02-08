@@ -10,6 +10,6 @@ public class Module: BaseTelegramModule
     public async Task Start()
     {
         // In preview version of Telegram.Bot SendTextMessageAsync signature has been changed. 
-        await Context.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "Welcome!");
+        await ReplyAsync("Welcome");
     }
 }
