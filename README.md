@@ -29,7 +29,8 @@ Framework for writing telegram bots with [Telegram.Bots](https://github.com/Tele
 - [.NET Generic Host](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host)
 - Dependency injection in modules
 - Long pooling
-- ~~WebHooks~~ _(In development)_
-- ~~Localization~~ _(In development)_
+- WebHooks
+- Localization
 ## Samples
 - [Commands, actions, stages and callbacks](https://github.com/Neisvestney/TelegramModularFramework/tree/master/samples/TelegramModularFramework.Sample)
+- [WebHook](https://github.com/Neisvestney/TelegramModularFramework/tree/master/samples/TelegramModularFramework.Samples.WebHook)

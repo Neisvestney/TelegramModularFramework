@@ -22,6 +22,8 @@
       topicUid: Guides.Handlers.States
     - name: Callback Queries
       topicUid: Guides.Handlers.CallbackQueries
+- name: WebHook
+  topicUid: Guides.WebHook
 - name: TypeReaders
   topicUid: Guides.TypeReaders
 - name: Localization
