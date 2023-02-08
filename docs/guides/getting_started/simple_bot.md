@@ -21,7 +21,7 @@ var host = Host.CreateDefaultBuilder(args)
     {
         c.TelegramBotClientOptions = new TelegramBotClientOptions(context.Configuration["Telegram:Token"]);
     })
-    .AddTelegramModulesService((context, c) => {})
+    .AddTelegramModulesService()
     .ConfigureServices(services =>
     {
         services.AddHostedService<TelegramHandler>();

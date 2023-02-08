@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
@@ -17,20 +18,23 @@ public class TelegramBotHostedService: BackgroundService
     private readonly ILogger<TelegramBotHostedService> _logger;
     private readonly TelegramBotEvents _events;
     private readonly TelegramBotUser _telegramBotUser;
+    private readonly TelegramBotHostConfiguration _options;
 
-    public TelegramBotHostedService(ITelegramBotClient botClient, ILogger<TelegramBotHostedService> logger, TelegramBotEvents events, TelegramBotUser telegramBotUser)
+    public TelegramBotHostedService(ITelegramBotClient botClient, ILogger<TelegramBotHostedService> logger, TelegramBotEvents events, TelegramBotUser telegramBotUser, IOptions<TelegramBotHostConfiguration> options)
     {
         _botClient = botClient;
         _logger = logger;
         _events = events;
         _telegramBotUser = telegramBotUser;
+        _options = options.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var receiverOptions = new ReceiverOptions
         {
-            AllowedUpdates = Array.Empty<UpdateType>() // receive all update types
+            AllowedUpdates = _options.AllowedUpdates.ToArray(),
+            ThrowPendingUpdates = _options.DropPendingUpdates ?? default
         };
 
         var user = await _botClient.GetMeAsync(stoppingToken);

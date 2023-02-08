@@ -24,7 +24,7 @@ try
         {
             c.TelegramBotClientOptions = new TelegramBotClientOptions(context.Configuration["Telegram:Token"]);
         })
-        .AddTelegramModulesService((context, c) => {})
+        .AddTelegramModulesService()
         .ConfigureServices(services =>
         {
             services.AddLocalization(options =>

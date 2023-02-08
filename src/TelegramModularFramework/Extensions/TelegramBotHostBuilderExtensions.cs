@@ -52,11 +52,11 @@ public static class TelegramBotHostBuilderExtensions
     /// <param name="builder">The host builder to configure.</param>
     /// <param name="config">The delegate to configure <see cref="T:TelegramModularFramework.Services.TelegramModulesConfiguration"/></param>
     /// <returns>Host builder</returns>
-    public static IHostBuilder AddTelegramModulesService(this IHostBuilder builder, Action<HostBuilderContext, TelegramModulesConfiguration> config)
+    public static IHostBuilder AddTelegramModulesService(this IHostBuilder builder, Action<HostBuilderContext, TelegramModulesConfiguration>? config = null)
     {
         return builder.ConfigureServices((context, services) =>
         {
-            services.Configure<TelegramModulesConfiguration>(c => config(context, c));
+            if (config != null) services.Configure<TelegramModulesConfiguration>(c => config(context, c));
             services.AddTransient(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.StateHolder);
             services.AddSingleton<TelegramModulesService>();
             services.AddTransient<IStringSplitter, StringSplitter>();

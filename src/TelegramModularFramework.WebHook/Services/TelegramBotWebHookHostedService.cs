@@ -26,19 +26,17 @@ public class TelegramBotWebHookHostedService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var receiverOptions = new ReceiverOptions
-        {
-            AllowedUpdates = Array.Empty<UpdateType>() // receive all update types
-        };
-
         var user = await _botClient.GetMeAsync(cancellationToken);
         _telegramBotUser.User = user;
         _logger.LogInformation("Connected as {username} with id {id}", user.Username, user.Id);
 
         await _botClient.SetWebhookAsync(
             url: $"{_options.HostAddress}{_options.Route}",
-            allowedUpdates: Array.Empty<UpdateType>(),
+            certificate: _options.Certificate,
+            ipAddress: _options.IpAddress,
+            allowedUpdates: _options.AllowedUpdates,
             secretToken: _options.SecretToken,
+            dropPendingUpdates: _options.DropPendingUpdates,
             cancellationToken: cancellationToken
         );
         

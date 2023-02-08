@@ -41,7 +41,9 @@ host.ConfigureTelegramBotHost((context, c) =>
   Used to add [Modules](xref:Guides.TelegramModule) and process updates
 
 ```csharp
-host.AddTelegramModulesService((context, c) => {})
+host.AddTelegramModulesService((context, c) => {
+    // Configuration
+})
 ```
 
 To add modules, set bot commands, handle post execution you need to create Hosted Service
