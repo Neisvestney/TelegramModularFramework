@@ -1,7 +1,7 @@
 # Telegram Modular Framework
 [![Nuget](https://img.shields.io/nuget/v/TelegramModularFramework)](https://www.nuget.org/packages/TelegramModularFramework/)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Neisvestney/TelegramModularFramework/Docs?label=docs)](https://neisvestney.github.io/TelegramModularFramework/)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Neisvestney/TelegramModularFramework/Publish?label=publish)](https://github.com/Neisvestney/TelegramModularFramework/actions/workflows/publish.yaml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Neisvestney/TelegramModularFramework/docs.yml?label=docs)](https://neisvestney.github.io/TelegramModularFramework/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Neisvestney/TelegramModularFramework/publish.yaml?label=publish)](https://github.com/Neisvestney/TelegramModularFramework/actions/workflows/publish.yaml)
 
 Framework for writing telegram bots with [Telegram.Bots](https://github.com/TelegramBots) and modules
 > **In development**.
