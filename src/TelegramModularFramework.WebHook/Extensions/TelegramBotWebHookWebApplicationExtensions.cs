@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using TelegramModularFramework.Services;
-using TelegramModularFramework.WebHook.Models;
 using TelegramModularFramework.WebHook.Services;
 
 namespace TelegramModularFramework.WebHook;
@@ -26,13 +25,14 @@ public static class TelegramBotWebHookWebApplicationExtensions
                 [FromServices] ITelegramBotClient botClient,
                 CancellationToken cancellationToken) =>
             {
-                logger.LogInformation("{Context}", request.Headers);
-
+                if (!SecretTokenValid(request, options.SecretToken))
+                {
+                    return Results.BadRequest();
+                }
+                
                 if (!request.HasJsonContentType())
                 {
-                    throw new BadHttpRequestException(
-                        "Request content type was not a recognized JSON content type.",
-                        StatusCodes.Status415UnsupportedMediaType);
+                    return Results.StatusCode(StatusCodes.Status415UnsupportedMediaType);
                 }
 
                 using StreamReader sr = new StreamReader(request.Body);
@@ -40,9 +40,18 @@ public static class TelegramBotWebHookWebApplicationExtensions
                 var content = await sr.ReadToEndAsync();
                 var update = JsonConvert.DeserializeObject<Update>(content);
 
-                await events.HandleUpdateAsync(botClient, update, cancellationToken);
+                if (update != null) await events.HandleUpdateAsync(botClient, update, cancellationToken);
+                else return Results.BadRequest();
 
                 return Results.Ok();
             });
+    }
+
+    private static bool SecretTokenValid(HttpRequest request, string token)
+    {
+        var isSecretTokenProvided = request.Headers.TryGetValue("X-Telegram-Bot-Api-Secret-Token", out var secretTokenHeader);
+        if (!isSecretTokenProvided) return false;
+
+        return string.Equals(secretTokenHeader, token, StringComparison.Ordinal);
     }
 }

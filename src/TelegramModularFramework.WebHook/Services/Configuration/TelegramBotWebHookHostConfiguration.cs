@@ -6,4 +6,5 @@ public class TelegramBotWebHookHostConfiguration : TelegramBotHostConfiguration
 {
     public string HostAddress { get; set; }
     public string Route { get; set; } = "/telegram";
+    public string SecretToken { get; set; }
 }

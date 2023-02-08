@@ -38,8 +38,11 @@ public class TelegramBotWebHookHostedService : IHostedService
         await _botClient.SetWebhookAsync(
             url: $"{_options.HostAddress}{_options.Route}",
             allowedUpdates: Array.Empty<UpdateType>(),
+            secretToken: _options.SecretToken,
             cancellationToken: cancellationToken
         );
+        
+        _logger.LogInformation("Webhook has been set");
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
