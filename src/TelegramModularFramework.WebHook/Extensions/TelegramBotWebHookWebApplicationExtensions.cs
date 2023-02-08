@@ -14,6 +14,10 @@ namespace TelegramModularFramework.WebHook;
 
 public static class TelegramBotWebHookWebApplicationExtensions
 {
+    /// <summary>
+    /// Creates route for receiving WebHooks with ASP.Net minimal API
+    /// </summary>
+    /// <param name="app">App to configure</param>
     public static void MapTelegramWebHook(this WebApplication app)
     {
         var options = app.Services.GetRequiredService<IOptions<TelegramBotWebHookHostConfiguration>>().Value;
