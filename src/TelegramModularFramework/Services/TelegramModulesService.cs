@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using Microsoft.Extensions.DependencyInjection;
@@ -449,6 +450,37 @@ public class TelegramModulesService
         return "/" + string.Join("/", ParsePath(path).Select(p => p.Template));
     }
 
+    private string InsertParametersIntoPath(string path, object? parameters)
+    {
+        if (parameters == null) return path;
+        
+        var parts = ParsePath(path);
+        var dictionary = parameters.ToDictionary();
+        var usedParams = new List<string>();
+        var result = new StringBuilder();
+        foreach (var part in parts)
+        {
+            result.Append("/");
+            if (part.Dynamic)
+            {
+                if (!dictionary.TryGetValue(part.Name, out var value))
+                    throw new ArgumentException($"{part.Name} was not present", nameof(parameters));
+
+                usedParams.Add(part.Name);
+                result.Append(value);
+            }
+            else
+            {
+                result.Append(part.Name);
+            }
+        }
+
+        var queryParams = dictionary.Where(e => !usedParams.Contains(e.Key)).ToDictionary(x => x.Key, x => x.Value);
+        result.Append(queryParams.ToQueryString());
+        
+        return result.ToString();
+    }
+
     private IEnumerable<PathPart> ParsePath(string path)
     {
         return path
@@ -491,7 +523,7 @@ public class TelegramModulesService
 
         var dataSplit = data.Split('?')[0].Split('/').Skip(1).ToArray();
         var pathParts = ParsePath(callbackQueryHandlerInfo.Name).ToArray();
-        var query = HttpUtility.ParseQueryString("?" + data.Split('?')[1]);
+        var query = data.Split('?').Length > 1 ? HttpUtility.ParseQueryString("?" + data.Split('?')[1]) : null;
 
         foreach (var parameterInfo in parametersInfos)
         {
@@ -499,7 +531,7 @@ public class TelegramModulesService
             var i = Array.FindIndex(pathParts, p => p.Dynamic && p.Name.ToLower() == parameterInfo.Name.ToLower());
             if (i == -1)
             {
-                value = query[parameterInfo.Name.ToLower()];
+                value = query?[parameterInfo.Name.ToLower()];
                 if (value == null)
                 {
                     throw new CallbackQueryHandlerBadPath(pathParts, parameterInfo, data);
@@ -751,6 +783,36 @@ public class TelegramModulesService
             getPath = new Uri(baseUri, path).AbsolutePath;
         }
 
-        _stateHolder.SetState(chatId, getPath);
+        await _stateHolder.SetState(chatId, getPath);
     }
+    
+    public string UrlFor(Type type, object? parameters = null)
+    {
+        var module = _modules.FirstOrDefault(m => m.Type == type);
+        if (module == null) throw new ArgumentException("Module not found", nameof(type));
+        return InsertParametersIntoPath(module.Group, parameters);
+    }
+    
+    public string UrlFor<TModule>(object? parameters = null) where TModule : BaseTelegramModule => UrlFor(typeof(TModule), parameters);
+
+    public string UrlFor(Type type, string handler, object? parameters = null)
+    {
+        var module = _modules.FirstOrDefault(m => m.Type == type);
+        if (module == null) throw new ArgumentException("Module not found", nameof(type));
+
+        var handlerInfo = _callbackQueryHandlers.FirstOrDefault(e => e.Module == module && e.MethodInfo.Name == handler);
+        if (handlerInfo == null)
+        {
+            if (_states.Count(s => s.Value.MethodInfo.Name == handler) != 0)
+            {
+                return InsertParametersIntoPath(module.Group, parameters);
+            }
+
+            throw new ArgumentException("Callback handler or state handler not found", nameof(handler));
+        }
+
+        return InsertParametersIntoPath(module.Group + "/" + handlerInfo.Attributes.Path, parameters);
+    }
+    
+    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : BaseTelegramModule => UrlFor(typeof(TModule), handler, parameters);
 }

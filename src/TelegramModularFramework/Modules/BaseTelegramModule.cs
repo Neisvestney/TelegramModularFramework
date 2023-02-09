@@ -168,4 +168,14 @@ public class BaseTelegramModule
     /// </summary>
     /// <param name="path">Relative or absolute path</param>
     public Task ChangeState(string path) => Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, path);
+
+    public string UrlFor<TModule>(object? parameters = null) where TModule : BaseTelegramModule => Context.ModulesService.UrlFor<TModule>(parameters);
+
+    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : BaseTelegramModule => Context.ModulesService.UrlFor<TModule>(handler, parameters);
+    
+    public string UrlFor(object? parameters = null) => Context.ModulesService.UrlFor(this.GetType(), parameters);
+    
+    public string UrlFor(string handler, object? parameters = null) => Context.ModulesService.UrlFor(this.GetType(), handler, parameters);
+    
+    public Task ExitFromState() => Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, "/");
 }
