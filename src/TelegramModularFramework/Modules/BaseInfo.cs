@@ -2,7 +2,7 @@
 
 namespace TelegramModularFramework.Modules;
 
-public class BaseInfo
+public abstract class BaseInfo
 {
     public MethodInfo MethodInfo { get; set; }
     public ModuleInfo Module { get; set; }

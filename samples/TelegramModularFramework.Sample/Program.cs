@@ -33,6 +33,7 @@ try
             });
             services.AddHostedService<TelegramHandler>();
             services.AddScoped<SampleService>();
+            services.AddSingleton<UsersService>();
         })
         .Build();
 

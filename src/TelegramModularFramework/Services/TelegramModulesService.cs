@@ -145,8 +145,7 @@ public class TelegramModulesService
         CancellationToken cancellationToken)
     {
         var args = update.Message.Text;
-        var context = new ModuleContext(botClient, this, update, args, state, null);
-        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+        var context = new ModuleContext(botClient, this, update, args, state, null, null, null);
 
         if (_states.TryGetValue(state, out var stateInfo))
         {
@@ -155,8 +154,12 @@ public class TelegramModulesService
             {
                 // Context
                 var module = stateInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
-                context.Group = stateInfo.Module.Group;
+                context = new ModuleContext(botClient, this, update, args, state, stateInfo.Module.Group, module, stateInfo);
                 module.Context = context;
+                
+                // Pre module execution
+                await module.HandlePreExecution(stateInfo);
+                CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
                 // Method
                 Result result;
@@ -182,6 +185,8 @@ public class TelegramModulesService
 
         else
         {
+            CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+            
             if (StateExecuted != null)
                 await StateExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
             await ChangeStateAsync(update.Message.Chat.Id, "/");
@@ -220,8 +225,7 @@ public class TelegramModulesService
         var args = update.Message.Text!.Split(' ');
         var commandString = args[0].Replace($"@{_telegramBotUser.User?.Username}", "");
         var argsString = string.Join(" ", args.Skip(1).ToList());
-        var context = new ModuleContext(botClient, this, update, argsString, commandString, null);
-        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+        var context = new ModuleContext(botClient, this, update, argsString, commandString, null, null, null);
 
         if (_commands.TryGetValue(commandString, out var commandInfo))
         {
@@ -231,8 +235,12 @@ public class TelegramModulesService
             {
                 // Context
                 var module = commandInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
-                context.Group = commandInfo.Module.Group;
+                context = new ModuleContext(botClient, this, update, argsString, commandString, commandInfo.Module.Group, module, commandInfo);
                 module.Context = context;
+                
+                // Pre module execution
+                await module.HandlePreExecution(commandInfo);
+                CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
                 // Method
                 Result result;
@@ -257,6 +265,8 @@ public class TelegramModulesService
         }
         else
         {
+            CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+            
             if (CommandExecuted != null)
                 await CommandExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
         }
@@ -281,9 +291,8 @@ public class TelegramModulesService
     private async Task HandleAction(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var actionString = update.Message.Text;
-        var context = new ModuleContext(botClient, this, update, "", actionString, null);
-        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
-        
+        var context = new ModuleContext(botClient, this, update, null, actionString, null, null, null);
+
         if (_actions.TryGetValue(actionString, out var actionInfo))
         {
             _logger.LogDebug("Executing action {action} from {module}", actionInfo.Name, actionInfo.Module.Type.Name);
@@ -291,8 +300,12 @@ public class TelegramModulesService
             {
                 // Context
                 var module = actionInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
-                context.Group = actionInfo.Module.Group;
+                context = new ModuleContext(botClient, this, update, null, actionString, actionInfo.Module.Group, module, actionInfo);
                 module.Context = context;
+                
+                // Pre module execution
+                await module.HandlePreExecution(actionInfo);
+                CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
                 // Method
                 Result result;
@@ -317,6 +330,8 @@ public class TelegramModulesService
         }
         else
         {
+            CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+            
             if (ActionExecuted != null)
                 await ActionExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
         }
@@ -391,8 +406,7 @@ public class TelegramModulesService
     
     private async Task HandleCallbackQuery(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var context = new ModuleContext(botClient, this, update, null, update.CallbackQuery.Data, null);
-        CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+        var context = new ModuleContext(botClient, this, update, null, update.CallbackQuery.Data, null, null, null);
 
         var callbackQueryHandlerInfo = _callbackQueryHandlers
             .Select(c => new
@@ -411,8 +425,12 @@ public class TelegramModulesService
             {
                 // Context
                 var module = callbackQueryHandlerInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
-                context.Group = callbackQueryHandlerInfo.Module.Group;
+                context = new ModuleContext(botClient, this, update, null, update.CallbackQuery.Data, callbackQueryHandlerInfo.Module.Group, module, callbackQueryHandlerInfo);
                 module.Context = context;
+                
+                // Pre module execution
+                await module.HandlePreExecution(callbackQueryHandlerInfo);
+                CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
 
                 // Method
                 Result result;
@@ -437,6 +455,8 @@ public class TelegramModulesService
         }
         else
         {
+            CultureInfo.CurrentCulture = _cultureInfoUpdater.GetCultureInfo(context);
+            
             if (CallbackExecuted != null)
                 await CallbackExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
             await ChangeStateAsync(update.Message.Chat.Id, "/");

@@ -8,13 +8,27 @@ namespace TelegramModularFramework.Modules;
 /// <summary>
 /// Base class for all modules
 /// </summary>
-public class BaseTelegramModule
+public abstract class BaseTelegramModule
 {
     /// <summary>
     /// Current context with client, update object and etc
     /// </summary>
     public ModuleContext Context { get; set; }
 
+    /// <summary>
+    /// Method calls before handler called
+    /// </summary>
+    /// <param name="info">
+    /// <see cref="TelegramModularFramework.Modules.CommandInfo"/>,
+    /// <see cref="TelegramModularFramework.Modules.ActionInfo"/>,
+    /// <see cref="TelegramModularFramework.Modules.StateInfo"/> or
+    /// <see cref="TelegramModularFramework.Modules.CallbackQueryHandlerInfo"/>
+    /// instance
+    /// </param>
+    public virtual Task HandlePreExecution(BaseInfo info)
+    {
+        return Task.CompletedTask;
+    }
 
     /// <summary>
     /// Replays with message to the chat from context
@@ -118,7 +132,7 @@ public class BaseTelegramModule
             cancellationToken
         );
     }
-    
+
     /// <summary>
     /// Use this method to edit text and game messages.
     /// </summary>
@@ -167,15 +181,19 @@ public class BaseTelegramModule
     /// Changes state of current chat
     /// </summary>
     /// <param name="path">Relative or absolute path</param>
-    public Task ChangeStateAsync(string path) => Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, path);
+    public Task ChangeStateAsync(string path) =>
+        Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, path);
 
-    public string UrlFor<TModule>(object? parameters = null) where TModule : BaseTelegramModule => Context.ModulesService.UrlFor<TModule>(parameters);
+    public string UrlFor<TModule>(object? parameters = null) where TModule : BaseTelegramModule =>
+        Context.ModulesService.UrlFor<TModule>(parameters);
 
-    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : BaseTelegramModule => Context.ModulesService.UrlFor<TModule>(handler, parameters);
-    
+    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : BaseTelegramModule =>
+        Context.ModulesService.UrlFor<TModule>(handler, parameters);
+
     public string UrlFor(object? parameters = null) => Context.ModulesService.UrlFor(this.GetType(), parameters);
-    
-    public string UrlFor(string handler, object? parameters = null) => Context.ModulesService.UrlFor(this.GetType(), handler, parameters);
-    
+
+    public string UrlFor(string handler, object? parameters = null) =>
+        Context.ModulesService.UrlFor(this.GetType(), handler, parameters);
+
     public Task ExitFromStateAsync() => Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, "/");
 }
