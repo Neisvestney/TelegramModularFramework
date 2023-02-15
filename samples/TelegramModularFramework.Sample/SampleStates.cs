@@ -12,7 +12,7 @@ public class SampleStates: BaseTelegramModule
     public async Task EnterName()
     {
         await ReplyAsync($"Enter name:");
-        await ChangeState(UrlFor<SampleState>());
+        await ChangeStateAsync(UrlFor<SampleState>());
     }
     
     [Group("sample")]
@@ -24,7 +24,7 @@ public class SampleStates: BaseTelegramModule
             if (input == null) throw new ValidationError("No text in message", nameof(input), 0);
             await ReplyAsync($"You entered: {input}");
             await ReplyAsync($"Enter age:");
-            await ChangeState(UrlFor<SampleAgeState>());
+            await ChangeStateAsync(UrlFor<SampleAgeState>());
         }
         
         [Group("age")]
@@ -35,7 +35,7 @@ public class SampleStates: BaseTelegramModule
             {
                 if (input < 1) throw new ValidationError("Age cannot be lower then 1", nameof(input), 0);
                 await ReplyAsync($"You entered: {input}");
-                await ExitFromState();
+                await ExitFromStateAsync();
             }
         }
     }
