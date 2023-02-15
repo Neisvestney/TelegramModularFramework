@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
+using TelegramModularFramework.Localization;
 using TelegramModularFramework.Services;
-using TelegramModularFramework.Services.Globalization;
-using TelegramModularFramework.Services.State;
 using TelegramModularFramework.Services.TypeReaders;
 using TelegramModularFramework.Services.Utils;
 
@@ -61,6 +61,7 @@ public static class TelegramBotHostBuilderExtensions
             services.AddSingleton<TelegramModulesService>();
             services.AddTransient<IStringSplitter, StringSplitter>();
             services.AddTransient(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.CultureInfoUpdater);
+            services.AddTransient(c => c.GetService<IOptions<TelegramModulesConfiguration>>().Value.TypeReadersMessagesStringLocalizer);
             services.AddSingleton<ITypeReader, StringTypeReader>();
             services.AddSingleton<ITypeReader, IntTypeReader>();
             services.AddSingleton<ITypeReader, BooleanTypeReader>();

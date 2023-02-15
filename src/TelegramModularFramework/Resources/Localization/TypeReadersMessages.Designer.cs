@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TelegramModularFramework.Resources {
+namespace TelegramModularFramework.Localization {
     using System;
     
     
@@ -21,7 +21,7 @@ namespace TelegramModularFramework.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TypeReadersMessages {
+    public class TypeReadersMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -35,10 +35,10 @@ namespace TelegramModularFramework.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TelegramModularFramework.Resources.TypeReadersMessages", typeof(TypeReadersMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TelegramModularFramework.Resources.Localization.TypeReadersMessages", typeof(TypeReadersMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -50,7 +50,7 @@ namespace TelegramModularFramework.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -62,7 +62,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Not a boolean.
         /// </summary>
-        internal static string NotABoolean {
+        public static string NotABoolean {
             get {
                 return ResourceManager.GetString("NotABoolean", resourceCulture);
             }
@@ -71,7 +71,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Not a decimal fractional number.
         /// </summary>
-        internal static string NotAFloat {
+        public static string NotAFloat {
             get {
                 return ResourceManager.GetString("NotAFloat", resourceCulture);
             }
@@ -80,7 +80,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Not a number.
         /// </summary>
-        internal static string NotANumber {
+        public static string NotANumber {
             get {
                 return ResourceManager.GetString("NotANumber", resourceCulture);
             }

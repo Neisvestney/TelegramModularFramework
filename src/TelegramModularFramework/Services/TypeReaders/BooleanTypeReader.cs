@@ -1,11 +1,19 @@
-﻿using TelegramModularFramework.Modules;
-using TelegramModularFramework.Resources;
+﻿using Microsoft.Extensions.Localization;
+using TelegramModularFramework.Localization;
+using TelegramModularFramework.Modules;
 
 namespace TelegramModularFramework.Services.TypeReaders;
 
 public class BooleanTypeReader : ITypeReader
 {
+    private readonly IStringLocalizer<TypeReadersMessages> _l;
+    
     public Type Type => typeof(bool);
+    
+    public BooleanTypeReader(IStringLocalizer<TypeReadersMessages> l)
+    {
+        _l = l;
+    }
 
     private List<string> _trueValues = new()
     {
@@ -35,7 +43,7 @@ public class BooleanTypeReader : ITypeReader
         }
         else
         {
-            return TypeReaderResult.FromError(TypeReadersMessages.NotABoolean);
+            return TypeReaderResult.FromError(_l["NotABoolean"]);
         }
     }
 }

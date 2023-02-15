@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TelegramModularFramework.Resources {
+namespace TelegramModularFramework.Localization {
     using System;
     
     
@@ -21,7 +21,7 @@ namespace TelegramModularFramework.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DefaultErrorMessages {
+    public class DefaultErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -35,10 +35,10 @@ namespace TelegramModularFramework.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TelegramModularFramework.Resources.Globalization.DefaultErrorMessages", typeof(DefaultErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TelegramModularFramework.Resources.Localization.DefaultErrorMessages", typeof(DefaultErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -50,7 +50,7 @@ namespace TelegramModularFramework.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -62,7 +62,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Too few arguments.
         /// </summary>
-        internal static string TooFewArguments {
+        public static string TooFewArguments {
             get {
                 return ResourceManager.GetString("TooFewArguments", resourceCulture);
             }
@@ -71,7 +71,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error when converting value: {0} at position {1}.
         /// </summary>
-        internal static string TypeConvertException {
+        public static string TypeConvertException {
             get {
                 return ResourceManager.GetString("TypeConvertException", resourceCulture);
             }
@@ -80,7 +80,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unknown action **{0}**.
         /// </summary>
-        internal static string UnknownAction {
+        public static string UnknownAction {
             get {
                 return ResourceManager.GetString("UnknownAction", resourceCulture);
             }
@@ -89,7 +89,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unknown command **{0}**.
         /// </summary>
-        internal static string UnknownCommand {
+        public static string UnknownCommand {
             get {
                 return ResourceManager.GetString("UnknownCommand", resourceCulture);
             }
@@ -98,7 +98,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unexpected state value\! Try again.
         /// </summary>
-        internal static string UnknownState {
+        public static string UnknownState {
             get {
                 return ResourceManager.GetString("UnknownState", resourceCulture);
             }
@@ -107,7 +107,7 @@ namespace TelegramModularFramework.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation error: {0} at position {1}.
         /// </summary>
-        internal static string ValidationError {
+        public static string ValidationError {
             get {
                 return ResourceManager.GetString("ValidationError", resourceCulture);
             }

@@ -29,6 +29,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
@@ -37,27 +38,29 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\Globalization\DefaultErrorMessages.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
+      <EmbeddedResource Update="Resources\Localization\DefaultErrorMessages.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>DefaultErrorMessages.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>TelegramModularFramework.Localization</CustomToolNamespace>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\TypeReadersMessages.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
+      <EmbeddedResource Update="Resources\Localization\TypeReadersMessages.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <PublicClass>true</PublicClass>
         <LastGenOutput>TypeReadersMessages.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>TelegramModularFramework.Localization</CustomToolNamespace>
       </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Globalization\DefaultErrorMessages.Designer.cs">
+      <Compile Update="Resources\Localization\DefaultErrorMessages.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DefaultErrorMessages.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\TypeReadersMessages.Designer.cs">
+      <Compile Update="Resources\Localization\TypeReadersMessages.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>TypeReadersMessages.resx</DependentUpon>
       </Compile>
     </ItemGroup>
-
 </Project>
