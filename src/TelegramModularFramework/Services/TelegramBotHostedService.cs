@@ -39,7 +39,7 @@ public class TelegramBotHostedService: BackgroundService
 
         var user = await _botClient.GetMeAsync(stoppingToken);
         _telegramBotUser.User = user;
-        _logger.LogInformation("Connected as {username} with id {id}", user.Username, user.Id);
+        _logger.LogInformation("Connected as {Username} with id {Id}", user.Username, user.Id);
 
         _botClient.StartReceiving(
             updateHandler: _events,

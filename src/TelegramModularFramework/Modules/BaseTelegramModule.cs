@@ -1,4 +1,6 @@
-﻿using Telegram.Bot;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -8,12 +10,14 @@ namespace TelegramModularFramework.Modules;
 /// <summary>
 /// Base class for all modules
 /// </summary>
+[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.WithMembers | ImplicitUseTargetFlags.Default)]
 public abstract class BaseTelegramModule
 {
     /// <summary>
     /// Current context with client, update object and etc
     /// </summary>
-    public ModuleContext Context { get; set; }
+
+    public ModuleContext Context { get; set; } = null!;
 
     /// <summary>
     /// Method calls before handler called
@@ -34,6 +38,9 @@ public abstract class BaseTelegramModule
     /// Replays with message to the chat from context
     /// </summary>
     /// <param name="text">Text of the message to be sent, 1-4096 characters after entities parsing</param>
+    /// <param name="messageThreadId">
+    /// Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    /// </param>
     /// <param name="parseMode">
     /// Mode for parsing entities in the new caption. See
     /// <a href="https://core.telegram.org/bots/api#formatting-options">formatting</a> options for more

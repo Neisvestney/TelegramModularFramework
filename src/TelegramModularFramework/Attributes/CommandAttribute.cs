@@ -8,7 +8,7 @@
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class CommandAttribute: Attribute
 {
-    public string Name { get; }
+    public string? Name { get; }
     
     /// <summary>
     /// Hide from /help and <see cref="TelegramModularFramework.Services.TelegramModulesService.SetMyCommands"/>
@@ -17,7 +17,7 @@ public class CommandAttribute: Attribute
     
     public CommandAttribute() { }
     
-    public CommandAttribute(string name = null, bool hideFromList = false)
+    public CommandAttribute(string? name = null, bool hideFromList = false)
     {
         if (name != null && name.Contains(' ')) throw new ArgumentException("Command name cannot contain spaces");
         Name = name;

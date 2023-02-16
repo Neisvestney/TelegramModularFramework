@@ -1,9 +1,14 @@
-﻿namespace TelegramModularFramework.Services.TypeReaders;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
+
+namespace TelegramModularFramework.Services.TypeReaders;
 
 public class TypeReaderResult
 {
     public bool Success { get; private set; }
-    public object Result { get; private set; }
+    
+    public object? Result { get; private set; }
+    
     public string? ErrorReason { get; private set; }
 
     public static TypeReaderResult FromSuccess(object result)
