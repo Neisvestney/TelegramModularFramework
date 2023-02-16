@@ -9,7 +9,7 @@ All [Modules](xref:Guides.TelegramModule) have DI support and activates through 
 with scoped service provider
 
 ```csharp
-public class SampleModule: BaseTelegramModule
+public class SampleModule: TelegramModule
 {
     private readonly TelegramModulesService _modulesService;
     private readonly SampleService _service;

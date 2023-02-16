@@ -1,9 +1,9 @@
-﻿namespace TelegramModularFramework.Attributes;
+﻿namespace TelegramModularFramework.Modules;
 
 /// <summary>
 /// Registers method as command handler with specified name.
 /// By default name retrieved from method name in format 'commandname'.
-/// Can be used along with <see cref="T:TelegramModularFramework.Attributes.ActionAttribute"/>.
+/// Can be used along with <see cref="T:TelegramModularFramework.Modules.ActionAttribute"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class CommandAttribute: Attribute

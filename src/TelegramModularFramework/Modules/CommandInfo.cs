@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using TelegramModularFramework.Attributes;
+using TelegramModularFramework.Modules;
 
 namespace TelegramModularFramework.Modules;
 

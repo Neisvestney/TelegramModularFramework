@@ -13,7 +13,7 @@ Query data value used as path to route event to handler
 ## Adding callback query handler
 
 Create in your @Guides.TelegramModule public method
-with @TelegramModularFramework.Attributes.CallbackQueryHandlerAttribute
+with @TelegramModularFramework.Modules.CallbackQueryHandlerAttribute
 and pass path argument to it without starting and ending `/`  
 You can add dynamic parts with `{name:regex}` format  
 If `regex` empty then `*` pattern used
@@ -21,7 +21,7 @@ If `regex` empty then `*` pattern used
 ```csharp
 using TelegramModularFramework.Modules;
 
-public class SampleModule: BaseTelegramModule
+public class SampleModule: TelegramModule
 {
     [CallbackQueryHandler("set/{index:*}")]
     public async Task HandleNumber(int index)
@@ -31,12 +31,12 @@ public class SampleModule: BaseTelegramModule
 }
 ```
 
-If module in [Group](xref:TelegramModularFramework.Attributes.GroupAttribute)
-then group path added to @TelegramModularFramework.Attributes.CallbackQueryHandlerAttribute path
+If module in [Group](xref:TelegramModularFramework.Modules.GroupAttribute)
+then group path added to @TelegramModularFramework.Modules.CallbackQueryHandlerAttribute path
 
 ```csharp
 [Group("sample")]
-public class SampleState: BaseTelegramModule
+public class SampleState: TelegramModule
 {
     [CallbackQueryHandler("test")]
     public async Task Handle()
@@ -68,13 +68,13 @@ await ReplyAsync("Select:", replyMarkup: replyMarkup);
 
 ## Run Mode
 
-Run mode can be specified with @TelegramModularFramework.Attributes.RunModeAttribute  
+Run mode can be specified with @TelegramModularFramework.Modules.RunModeAttribute  
 @TelegramModularFramework.Modules.RunMode.Sync - Default. Commands executes in order  
 @TelegramModularFramework.Modules.RunMode.Async - Commands executes asynchronously
 
 ## Summary
 
-To add summary use @TelegramModularFramework.Attributes.SummaryAttribute
+To add summary use @TelegramModularFramework.Modules.SummaryAttribute
 
 ```csharp
 [Summary("Do things")]

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using TelegramModularFramework.Attributes;
 using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services.Exceptions;
 using TelegramModularFramework.Services.Globalization;
@@ -153,7 +152,7 @@ public class TelegramModulesService
             using (var scope = _provider.CreateScope())
             {
                 // Context
-                var module = stateInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                var module = stateInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as TelegramModule;
                 context = new ModuleContext(botClient, this, update, args, state, stateInfo.Module.Group, module, stateInfo);
                 module!.Context = context;
                 
@@ -193,7 +192,7 @@ public class TelegramModulesService
         }
     }
     
-    private async Task InvokeStateHandler(StateInfo stateInfo, BaseTelegramModule module, IServiceProvider scoped, string? args)
+    private async Task InvokeStateHandler(StateInfo stateInfo, TelegramModule module, IServiceProvider scoped, string? args)
     {
         var returnTask = stateInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
 
@@ -234,7 +233,7 @@ public class TelegramModulesService
             using (var scope = _provider.CreateScope())
             {
                 // Context
-                var module = commandInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                var module = commandInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as TelegramModule;
                 context = new ModuleContext(botClient, this, update, argsString, commandString, commandInfo.Module.Group, module, commandInfo);
                 module!.Context = context;
                 
@@ -273,7 +272,7 @@ public class TelegramModulesService
         }
     }
 
-    private async Task InvokeCommand(CommandInfo commandInfo, BaseTelegramModule module, IServiceProvider scoped,
+    private async Task InvokeCommand(CommandInfo commandInfo, TelegramModule module, IServiceProvider scoped,
         string args)
     {
         var returnTask = commandInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
@@ -300,7 +299,7 @@ public class TelegramModulesService
             using (var scope = _provider.CreateScope())
             {
                 // Context
-                var module = actionInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                var module = actionInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as TelegramModule;
                 context = new ModuleContext(botClient, this, update, null, actionString, actionInfo.Module.Group, module, actionInfo);
                 module!.Context = context;
                 
@@ -419,7 +418,7 @@ public class TelegramModulesService
         return parameters;
     }
 
-    private async Task InvokeAction(ActionInfo actionInfo, BaseTelegramModule module, IServiceProvider scoped)
+    private async Task InvokeAction(ActionInfo actionInfo, TelegramModule module, IServiceProvider scoped)
     {
         var returnTask = actionInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
 
@@ -457,7 +456,7 @@ public class TelegramModulesService
             using (var scope = _provider.CreateScope())
             {
                 // Context
-                var module = callbackQueryHandlerInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as BaseTelegramModule;
+                var module = callbackQueryHandlerInfo.Module.Factory.Invoke(scope.ServiceProvider, null) as TelegramModule;
                 context = new ModuleContext(botClient, this, update, null, update.CallbackQuery.Data, callbackQueryHandlerInfo.Module.Group, module, callbackQueryHandlerInfo);
                 module!.Context = context;
                 
@@ -496,7 +495,7 @@ public class TelegramModulesService
         }
     }
 
-    public async Task InvokeCallbackHandler(CallbackQueryHandlerInfo callbackQueryHandlerInfo, BaseTelegramModule module, string data, IServiceProvider scoped)
+    public async Task InvokeCallbackHandler(CallbackQueryHandlerInfo callbackQueryHandlerInfo, TelegramModule module, string data, IServiceProvider scoped)
     {
         var returnTask = callbackQueryHandlerInfo.MethodInfo.ReturnType.IsAssignableFrom(typeof(Task));
 
@@ -546,8 +545,8 @@ public class TelegramModulesService
     /// <summary>
     /// Adds single module
     /// </summary>
-    /// <typeparam name="T">Class inherited from <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/></typeparam>
-    public void AddModule<T>() where T : BaseTelegramModule
+    /// <typeparam name="T">Class inherited from <see cref="T:TelegramModularFramework.Modules.TelegramModule"/></typeparam>
+    public void AddModule<T>() where T : TelegramModule
     {
         AddModuleInternal(typeof(T));
     }
@@ -556,11 +555,11 @@ public class TelegramModulesService
     /// <summary>
     /// Adds single module
     /// </summary>
-    /// <param name="module">Type of class inherited from <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/></param>
+    /// <param name="module">Type of class inherited from <see cref="T:TelegramModularFramework.Modules.TelegramModule"/></param>
     /// <exception cref="Exception">Class has wrong definition</exception>
     public void AddModule(Type module)
     {
-        if (!module.IsPublic || module.IsAbstract || !module.IsSubclassOf(typeof(BaseTelegramModule)))
+        if (!module.IsPublic || module.IsAbstract || !module.IsSubclassOf(typeof(TelegramModule)))
         {
             throw new Exception($"Wrong module {module}");
         }
@@ -703,7 +702,7 @@ public class TelegramModulesService
 
         foreach (var nestedType in module
                      .GetNestedTypes()
-                     .Where(t => t.IsNestedPublic && !t.IsAbstract && t.IsSubclassOf(typeof(BaseTelegramModule)))
+                     .Where(t => t.IsNestedPublic && !t.IsAbstract && t.IsSubclassOf(typeof(TelegramModule)))
                 )
         {
             AddModuleInternal(nestedType);
@@ -722,7 +721,7 @@ public class TelegramModulesService
 
         var modules = assembly
             .GetTypes()
-            .Where(t => t.IsPublic && !t.IsAbstract && t.IsSubclassOf(typeof(BaseTelegramModule)));
+            .Where(t => t.IsPublic && !t.IsAbstract && t.IsSubclassOf(typeof(TelegramModule)));
 
         foreach (var module in modules)
         {
@@ -778,7 +777,7 @@ public class TelegramModulesService
         return PathUtils.InsertParametersIntoPath(module.Group, parameters);
     }
     
-    public string UrlFor<TModule>(object? parameters = null) where TModule : BaseTelegramModule => UrlFor(typeof(TModule), parameters);
+    public string UrlFor<TModule>(object? parameters = null) where TModule : TelegramModule => UrlFor(typeof(TModule), parameters);
 
     public string UrlFor(Type type, string handler, object? parameters = null)
     {
@@ -799,5 +798,5 @@ public class TelegramModulesService
         return PathUtils.InsertParametersIntoPath(module.Group + "/" + handlerInfo.Attributes.Path, parameters);
     }
     
-    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : BaseTelegramModule => UrlFor(typeof(TModule), handler, parameters);
+    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : TelegramModule => UrlFor(typeof(TModule), handler, parameters);
 }

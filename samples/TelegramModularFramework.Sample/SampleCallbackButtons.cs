@@ -1,11 +1,10 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
-using TelegramModularFramework.Attributes;
 using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services.Exceptions;
 
 namespace TelegramModularFramework.Sample;
 
-public class SampleCallbackButtons : BaseTelegramModule
+public class SampleCallbackButtons : TelegramModule
 {
     [Command]
     [Action]
@@ -25,7 +24,7 @@ public class SampleCallbackButtons : BaseTelegramModule
     }
 
     [Group("page")]
-    public class SampleState : BaseTelegramModule
+    public class SampleState : TelegramModule
     {
         [CallbackQueryHandler("prev")]
         public async Task HandlePrev()

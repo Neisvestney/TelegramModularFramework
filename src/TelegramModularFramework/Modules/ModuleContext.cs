@@ -46,7 +46,7 @@ public class ModuleContext
     /// Circular reference to Module.
     /// Null if handler not exists.
     /// </summary>
-    public BaseTelegramModule? Module { get; }
+    public TelegramModule? Module { get; }
     
     /// <summary>
     /// <see cref="TelegramModularFramework.Modules.CommandInfo"/>,
@@ -58,7 +58,7 @@ public class ModuleContext
     /// </summary>
     public BaseInfo? Info { get; }
 
-    public ModuleContext(ITelegramBotClient client, TelegramModulesService modulesService, Update update, string? args, string commandString, string? group, BaseTelegramModule? module, BaseInfo? info)
+    public ModuleContext(ITelegramBotClient client, TelegramModulesService modulesService, Update update, string? args, string commandString, string? group, TelegramModule? module, BaseInfo? info)
     {
         Client = client;
         ModulesService = modulesService;

@@ -1,4 +1,4 @@
-﻿namespace TelegramModularFramework.Attributes;
+﻿namespace TelegramModularFramework.Modules;
 
 /// <summary>
 /// Registers method as state handler of current state module.

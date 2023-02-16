@@ -1,4 +1,4 @@
-﻿using TelegramModularFramework.Attributes;
+﻿using TelegramModularFramework.Modules;
 
 namespace TelegramModularFramework.Modules;
 

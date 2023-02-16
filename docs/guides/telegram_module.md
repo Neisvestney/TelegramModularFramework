@@ -5,23 +5,23 @@ uid: Guides.TelegramModule
 
 # Telegram Module
 
-Telegram Module is a class inherit from @TelegramModularFramework.Modules.BaseTelegramModule  
+Telegram Module is a class inherit from @TelegramModularFramework.Modules.TelegramModule  
 Used to define [Handlers](xref:Guides.Handlers.Introduction)
 
 ## Context
 
-Module has @TelegramModularFramework.Modules.BaseTelegramModule.Context field with
+Module has @TelegramModularFramework.Modules.TelegramModule.Context field with
 current client, update object, command and args strings
 
-Other fields in [Api Rerefence](xref:TelegramModularFramework.Modules.BaseTelegramModule)
+Other fields in [Api Rerefence](xref:TelegramModularFramework.Modules.TelegramModule)
 
 ## Methods
 
 To reply to chat from which came current event you can use
-@TelegramModularFramework.Modules.BaseTelegramModule.ReplyAsync  
-To change current chat state there are @TelegramModularFramework.Modules.BaseTelegramModule.ChangeState medhod
+@TelegramModularFramework.Modules.TelegramModule.ReplyAsync  
+To change current chat state there are @TelegramModularFramework.Modules.TelegramModule.ChangeState medhod
 
-Other methods in [Api Rerefence](xref:TelegramModularFramework.Modules.BaseTelegramModule)
+Other methods in [Api Rerefence](xref:TelegramModularFramework.Modules.TelegramModule)
 
 ## Groups
 
@@ -29,16 +29,16 @@ Other methods in [Api Rerefence](xref:TelegramModularFramework.Modules.BaseTeleg
 > **In development.** Commands and actions don't respect groups
 
 To group your [Handlers](xref:Guides.Handlers.Introduction) you can nest modeles with
-@TelegramModularFramework.Attributes.GroupAttribute
+@TelegramModularFramework.Modules.GroupAttribute
 
 ```csharp
-public class SampleStates: BaseTelegramModule
+public class SampleStates: TelegramModule
 {
     [Group("sample")]
-    public class SampleGroup: BaseTelegramModule
+    public class SampleGroup: TelegramModule
     {
         [Group("test")]
-        public class TestGroup: BaseTelegramModule
+        public class TestGroup: TelegramModule
         {
         
         }

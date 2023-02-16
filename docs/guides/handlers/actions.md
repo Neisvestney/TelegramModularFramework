@@ -11,12 +11,12 @@ Can be combined with [Keyboards](https://telegrambots.github.io/book/2/reply-mar
 ## Adding action
 
 Create in your @Guides.TelegramModule public method
-with @TelegramModularFramework.Attributes.ActionAttribute
+with @TelegramModularFramework.Modules.ActionAttribute
 
 ```csharp
 using TelegramModularFramework.Modules;
 
-public class SampleModule: BaseTelegramModule
+public class SampleModule: TelegramModule
 {
     [Action]
     public async Task ShowSomething()
@@ -27,7 +27,7 @@ public class SampleModule: BaseTelegramModule
 ```
 
 By default action name generates from method name `ActionName -> Action Name`  
-You can specify name by passing `name` argument to @TelegramModularFramework.Attributes.ActionAttribute  
+You can specify name by passing `name` argument to @TelegramModularFramework.Modules.ActionAttribute  
 Name cannot contain spaces
 
 ```csharp
@@ -41,13 +41,13 @@ to get some information
 
 ## Run Mode
 
-Run mode can be specified with @TelegramModularFramework.Attributes.RunModeAttribute  
+Run mode can be specified with @TelegramModularFramework.Modules.RunModeAttribute  
 @TelegramModularFramework.Modules.RunMode.Sync - Default. Commands executes in order  
 @TelegramModularFramework.Modules.RunMode.Async - Commands executes asynchronously
 
 ## Summary
 
-To add summary to command use @TelegramModularFramework.Attributes.SummaryAttribute
+To add summary to command use @TelegramModularFramework.Modules.SummaryAttribute
 
 ```csharp
 [Summary("Do things")]

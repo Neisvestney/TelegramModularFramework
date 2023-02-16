@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>0.7.0</Version>
+        <Version>1.0.0</Version>
         <Authors>Neisvestney</Authors>
         <Description>TelegramModularFramework Extension for Asp.Net</Description>
         <PackageTags>telegram;framework;net6.0;di;modules;aspnetcore</PackageTags>

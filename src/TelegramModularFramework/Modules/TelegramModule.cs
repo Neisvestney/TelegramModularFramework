@@ -11,7 +11,7 @@ namespace TelegramModularFramework.Modules;
 /// Base class for all modules
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.WithMembers | ImplicitUseTargetFlags.Default)]
-public abstract class BaseTelegramModule
+public abstract class TelegramModule
 {
     /// <summary>
     /// Current context with client, update object and etc
@@ -191,10 +191,10 @@ public abstract class BaseTelegramModule
     public Task ChangeStateAsync(string path) =>
         Context.ModulesService.ChangeStateAsync(Context.Update.Message.Chat.Id, path);
 
-    public string UrlFor<TModule>(object? parameters = null) where TModule : BaseTelegramModule =>
+    public string UrlFor<TModule>(object? parameters = null) where TModule : TelegramModule =>
         Context.ModulesService.UrlFor<TModule>(parameters);
 
-    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : BaseTelegramModule =>
+    public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : TelegramModule =>
         Context.ModulesService.UrlFor<TModule>(handler, parameters);
 
     public string UrlFor(object? parameters = null) => Context.ModulesService.UrlFor(this.GetType(), parameters);

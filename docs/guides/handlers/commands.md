@@ -10,12 +10,12 @@ Text messages starting with `/`
 ## Adding command
 
 Create in your @Guides.TelegramModule public medthod
-with @TelegramModularFramework.Attributes.CommandAttribute
+with @TelegramModularFramework.Modules.CommandAttribute
 
 ```csharp
 using TelegramModularFramework.Modules;
 
-public class SampleModule: BaseTelegramModule
+public class SampleModule: TelegramModule
 {
     [Command]
     public async Task Start()
@@ -26,7 +26,7 @@ public class SampleModule: BaseTelegramModule
 ```
 
 By default, command name generates from method name `CommandName -> /commandname`  
-You can specify name by passing `name` argument to @TelegramModularFramework.Attributes.CommandAttribute  
+You can specify name by passing `name` argument to @TelegramModularFramework.Modules.CommandAttribute  
 Name cannot contain spaces
 
 ```csharp
@@ -52,13 +52,13 @@ Available typereaders and guide how to make custom one are present in @Guides.Ty
 
 ## Run Mode
 
-Run mode can be specified with @TelegramModularFramework.Attributes.RunModeAttribute  
+Run mode can be specified with @TelegramModularFramework.Modules.RunModeAttribute  
 @TelegramModularFramework.Modules.RunMode.Sync - Default. Commands executes in order  
 @TelegramModularFramework.Modules.RunMode.Async - Commands executes asynchronously
 
 ## Summary
 
-To add summary to command use @TelegramModularFramework.Attributes.SummaryAttribute
+To add summary to command use @TelegramModularFramework.Modules.SummaryAttribute
 
 ```csharp
 [Summary("Do things")]
@@ -69,7 +69,7 @@ To add summary to command use @TelegramModularFramework.Attributes.SummaryAttrib
 You can call @TelegramModularFramework.Services.TelegramModulesService.SetMyCommands to set
 list of visible to bot  
 Command must have [summary](xref:Guides.Handlers.Commands#summary)
-To hide set `hideFromList` argument to @TelegramModularFramework.Attributes.CommandAttribute
+To hide set `hideFromList` argument to @TelegramModularFramework.Modules.CommandAttribute
 
 ```csharp
 [Command(hideFromList: true)]

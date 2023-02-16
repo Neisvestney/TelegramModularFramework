@@ -1,13 +1,11 @@
-﻿using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
-using TelegramModularFramework.Attributes;
+﻿using Telegram.Bot.Types.ReplyMarkups;
 using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services;
 using TelegramModularFramework.Services.Exceptions;
 
 namespace TelegramModularFramework.Sample;
 
-public class SampleModule: BaseTelegramModule
+public class SampleModule: TelegramModule
 {
     private readonly TelegramModulesService _modulesService;
     private readonly SampleService _service;

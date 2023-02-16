@@ -1,10 +1,9 @@
-﻿using TelegramModularFramework.Attributes;
-using TelegramModularFramework.Modules;
+﻿using TelegramModularFramework.Modules;
 using TelegramModularFramework.Services.Exceptions;
 
 namespace TelegramModularFramework.Sample; 
 
-public class SampleStates: BaseTelegramModule
+public class SampleStates: TelegramModule
 {
     [Command]
     [Action]
@@ -16,7 +15,7 @@ public class SampleStates: BaseTelegramModule
     }
     
     [Group("sample")]
-    public class SampleState: BaseTelegramModule
+    public class SampleState: TelegramModule
     {
         [StateHandler]
         public async Task HandleState(string input)
@@ -28,7 +27,7 @@ public class SampleStates: BaseTelegramModule
         }
         
         [Group("age")]
-        public class SampleAgeState: BaseTelegramModule
+        public class SampleAgeState: TelegramModule
         {
             [StateHandler(parseArgs:true)]
             public async Task HandleState(int input)

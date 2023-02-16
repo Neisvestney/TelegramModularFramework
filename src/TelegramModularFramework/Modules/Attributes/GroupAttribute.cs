@@ -1,7 +1,7 @@
-﻿namespace TelegramModularFramework.Attributes;
+﻿namespace TelegramModularFramework.Modules;
 
 /// <summary>
-/// Specifies that <see cref="T:TelegramModularFramework.Modules.BaseTelegramModule"/> in group
+/// Specifies that <see cref="T:TelegramModularFramework.Modules.TelegramModule"/> in group
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class GroupAttribute: Attribute

@@ -1,9 +1,8 @@
-﻿using TelegramModularFramework.Attributes;
-using TelegramModularFramework.Modules;
+﻿using TelegramModularFramework.Modules;
 
 namespace TelegramModularFramework.Sample;
 
-public class SampleModuleWithUser: BaseTelegramModule
+public class SampleModuleWithUser: TelegramModule
 {
     private readonly UsersService _service;
     public string UserData { get; set; }

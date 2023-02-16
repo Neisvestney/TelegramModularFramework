@@ -5,19 +5,19 @@ uid: Guides.Handlers.States
 
 # States
 
-If previous handler calls @TelegramModularFramework.Modules.BaseTelegramModule.ChangeState
-then associated [State Handler](xref:TelegramModularFramework.Attributes.StateHandlerAttribute) called
+If previous handler calls @TelegramModularFramework.Modules.TelegramModule.ChangeState
+then associated [State Handler](xref:TelegramModularFramework.Modules.StateHandlerAttribute) called
 
 ## Adding command
 
 Create in your @Guides.TelegramModule public medthod
-with @TelegramModularFramework.Attributes.StateHandlerAttribute  
-@Guides.TelegramModule must be in [Group](xref:TelegramModularFramework.Attributes.GroupAttribute)
+with @TelegramModularFramework.Modules.StateHandlerAttribute  
+@Guides.TelegramModule must be in [Group](xref:TelegramModularFramework.Modules.GroupAttribute)
 
 ```csharp
 using TelegramModularFramework.Modules;
 
-public class SampleModule: BaseTelegramModule
+public class SampleModule: TelegramModule
 {
     [Command]
     [Action]
@@ -29,7 +29,7 @@ public class SampleModule: BaseTelegramModule
     }
 
     [Group("sample")]
-    public class SampleState: BaseTelegramModule
+    public class SampleState: TelegramModule
     {
         [StateHandler]
         public async Task HandleState(string input)
@@ -46,11 +46,11 @@ State path generates from module group
 
 ## Arguments
 
-If @TelegramModularFramework.Attributes.StateHandlerAttribute.ParseArgs is false 
-[State Handler](xref:TelegramModularFramework.Attributes.StateHandlerAttribute)
+If @TelegramModularFramework.Modules.StateHandlerAttribute.ParseArgs is false 
+[State Handler](xref:TelegramModularFramework.Modules.StateHandlerAttribute)
 retrieve on string argument equals to message text  
 
-If @TelegramModularFramework.Attributes.StateHandlerAttribute.ParseArgs is true
+If @TelegramModularFramework.Modules.StateHandlerAttribute.ParseArgs is true
 arguments parsed as [commands](xref:Guides.Handlers.Commands#arguments) do
 
 ```csharp
@@ -59,13 +59,13 @@ arguments parsed as [commands](xref:Guides.Handlers.Commands#arguments) do
 
 ## Run Mode
 
-Run mode can be specified with @TelegramModularFramework.Attributes.RunModeAttribute  
+Run mode can be specified with @TelegramModularFramework.Modules.RunModeAttribute  
 @TelegramModularFramework.Modules.RunMode.Sync - Default. Commands executes in order  
 @TelegramModularFramework.Modules.RunMode.Async - Commands executes asynchronously
 
 ## Summary
 
-To add summary to command use @TelegramModularFramework.Attributes.SummaryAttribute
+To add summary to command use @TelegramModularFramework.Modules.SummaryAttribute
 
 ```csharp
 [Summary("Do things")]

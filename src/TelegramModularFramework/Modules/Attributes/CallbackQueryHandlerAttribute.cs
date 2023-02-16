@@ -1,4 +1,4 @@
-﻿namespace TelegramModularFramework.Attributes;
+﻿namespace TelegramModularFramework.Modules;
 
 /// <summary>
 /// Registers method that used for handling <see cref="Telegram.Bot.Types.Enums.UpdateType.CallbackQuery"/> updates

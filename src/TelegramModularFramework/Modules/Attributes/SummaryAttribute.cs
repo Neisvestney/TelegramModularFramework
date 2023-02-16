@@ -1,4 +1,4 @@
-﻿namespace TelegramModularFramework.Attributes;
+﻿namespace TelegramModularFramework.Modules;
 
 /// <summary>
 /// Add description to command or action info which can be used after in /help or in <see cref="TelegramModularFramework.Services.TelegramModulesService.SetMyCommands"/>

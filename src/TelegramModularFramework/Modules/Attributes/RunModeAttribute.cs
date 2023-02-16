@@ -1,6 +1,6 @@
 ﻿using TelegramModularFramework.Modules;
 
-namespace TelegramModularFramework.Attributes;
+namespace TelegramModularFramework.Modules;
 
 
 /// <summary>

@@ -94,7 +94,7 @@ public class TelegramHandler: BackgroundService
 
 `Module.cs`
 ```csharp
-public class Module: BaseTelegramModule
+public class Module: TelegramModule
 {
     [Command]
     public async Task Start()
