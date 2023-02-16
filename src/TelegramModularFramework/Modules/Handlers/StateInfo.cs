@@ -1,6 +1,6 @@
 ﻿namespace TelegramModularFramework.Modules;
 
-public class StateInfo: BaseInfo
+public class StateInfo: HandlerInfoBase
 {
     public bool ParseArgs { get; set; }
 }

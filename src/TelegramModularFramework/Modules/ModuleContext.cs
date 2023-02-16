@@ -56,9 +56,9 @@ public class ModuleContext
     /// instance.
     /// Null if handler not exists.
     /// </summary>
-    public BaseInfo? Info { get; }
+    public HandlerInfoBase? HandlerInfo { get; }
 
-    public ModuleContext(ITelegramBotClient client, TelegramModulesService modulesService, Update update, string? args, string commandString, string? group, TelegramModule? module, BaseInfo? info)
+    public ModuleContext(ITelegramBotClient client, TelegramModulesService modulesService, Update update, string? args, string commandString, string? group, TelegramModule? module, HandlerInfoBase? info)
     {
         Client = client;
         ModulesService = modulesService;
@@ -67,6 +67,6 @@ public class ModuleContext
         CommandString = commandString;
         Group = group;
         Module = module;
-        Info = info;
+        HandlerInfo = info;
     }
 }

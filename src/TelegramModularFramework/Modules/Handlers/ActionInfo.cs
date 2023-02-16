@@ -2,7 +2,7 @@
 
 namespace TelegramModularFramework.Modules;
 
-public class ActionInfo: BaseInfo
+public class ActionInfo: HandlerInfoBase
 {
     public ActionAttribute Attributes { get; set; }
     

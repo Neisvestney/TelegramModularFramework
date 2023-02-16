@@ -29,7 +29,7 @@ public abstract class TelegramModule
     /// <see cref="TelegramModularFramework.Modules.CallbackQueryHandlerInfo"/>
     /// instance
     /// </param>
-    public virtual Task HandlePreExecution(BaseInfo info)
+    public virtual Task HandlePreExecution(HandlerInfoBase info)
     {
         return Task.CompletedTask;
     }

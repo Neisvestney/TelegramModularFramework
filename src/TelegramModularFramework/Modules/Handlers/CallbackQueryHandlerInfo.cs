@@ -2,7 +2,7 @@
 
 namespace TelegramModularFramework.Modules;
 
-public class CallbackQueryHandlerInfo: BaseInfo
+public class CallbackQueryHandlerInfo: HandlerInfoBase
 {
     public CallbackQueryHandlerAttribute Attributes { get; set; }
 }

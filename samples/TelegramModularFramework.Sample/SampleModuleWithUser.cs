@@ -12,7 +12,7 @@ public class SampleModuleWithUser: TelegramModule
         _service = service;
     }
 
-    public async override Task HandlePreExecution(BaseInfo info)
+    public async override Task HandlePreExecution(HandlerInfoBase info)
     {
         if (_service.Users.TryGetValue(Context.Update.Message.From.Id, out var data))
         {
