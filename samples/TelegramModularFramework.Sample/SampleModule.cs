@@ -45,6 +45,20 @@ public class SampleModule: BaseTelegramModule
     {
         await ReplyAsync($"Test2 {number} {numberFloat} {numberDouble} {boolean}");
     }
+    
+    [Command]
+    [Summary("Input using params keyword")]
+    public async Task Params(params string[] input)
+    {
+        await ReplyAsync($"You entered {string.Join(" ", input)}");
+    }
+    
+    [Command]
+    [Summary("Input numbers using params keyword")]
+    public async Task Numbers(params int[] input)
+    {
+        await ReplyAsync($"You entered {string.Join(", ", input)}");
+    }
 
     [Command]
     [Summary("Prints info")]

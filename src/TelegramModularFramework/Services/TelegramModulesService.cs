@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
@@ -371,16 +372,48 @@ public class TelegramModulesService
                 throw new BadArgs(i, parametersInfos.Length, splittedArgs.Count());
             }
 
+            var isParams = parametersInfos[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+            
+            if (isParams)
+            {
+                type = type.GetElementType();
+            }
+
             var reader = _provider
                 .GetServices<ITypeReader>()
                 .First(r => r.Type == type);
-            var read = await reader.ReadTypeAsync(context, splittedArgs[i]);
-            if (!read.Success)
+            
+            if (isParams)
             {
-                throw new TypeConvertException(read.ErrorReason, parametersInfos[i], i);
+                Array args = Array.CreateInstance(type, splittedArgs.Count - i);
+                
+                int count = 0;
+                for (int j = i; j < splittedArgs.Count; j++)
+                {
+                    var read = await reader.ReadTypeAsync(context, splittedArgs[j]);
+            
+                    if (!read.Success)
+                    {
+                        throw new TypeConvertException(read.ErrorReason, parametersInfos[i], j);
+                    }
+                    
+                    args.SetValue(Convert.ChangeType(read.Result, type), count);
+                    count++;
+                }
+                
+                parameters[i] = args;
             }
+            else
+            {
+                var read = await reader.ReadTypeAsync(context, splittedArgs[i]);
+            
+                if (!read.Success)
+                {
+                    throw new TypeConvertException(read.ErrorReason, parametersInfos[i], i);
+                }
 
-            parameters[i] = read.Result;
+                parameters[i] = read.Result;
+            }
         }
 
         return parameters;
