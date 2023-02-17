@@ -1,5 +1,7 @@
-﻿using Telegram.Bot.Types.ReplyMarkups;
+﻿using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramModularFramework.Modules;
+using TelegramModularFramework.Preconditions;
 using TelegramModularFramework.Services;
 using TelegramModularFramework.Services.Exceptions;
 
@@ -92,13 +94,20 @@ public class SampleModule: TelegramModule
     [Action]
     public async Task ShowSomething()
     {
-        ReplyAsync("Something");
+        await ReplyAsync("Something");
     }
     
     [Action("Action")]
     [Command("command")]
     public async Task Hybrid()
     {
-        ReplyAsync("Hybrid");
+        await ReplyAsync("Hybrid");
+    }
+    
+    [RequireChatType(ChatType.Group)]
+    [Command]
+    public async Task Group()
+    {
+        await ReplyAsync("Group");
     }
 }

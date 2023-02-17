@@ -10,6 +10,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TelegramModularFramework.Modules;
+using TelegramModularFramework.Preconditions;
 using TelegramModularFramework.Services.Exceptions;
 using TelegramModularFramework.Services.Globalization;
 using TelegramModularFramework.Services.State;
@@ -164,6 +165,7 @@ public class TelegramModulesService
                 Result result;
                 try
                 {
+                    await CheckPreconditions(context, scope.ServiceProvider);
                     await InvokeStateHandler(stateInfo, module, scope.ServiceProvider, args);
                     result = Result.FromSuccess();
                 }
@@ -245,6 +247,7 @@ public class TelegramModulesService
                 Result result;
                 try
                 {
+                    await CheckPreconditions(context, scope.ServiceProvider);
                     await InvokeCommand(commandInfo, module, scope.ServiceProvider, argsString);
                     result = Result.FromSuccess();
                 }
@@ -311,6 +314,7 @@ public class TelegramModulesService
                 Result result;
                 try
                 {
+                    await CheckPreconditions(context, scope.ServiceProvider);
                     await InvokeAction(actionInfo, module, scope.ServiceProvider);
                     result = Result.FromSuccess();
                 }
@@ -334,6 +338,20 @@ public class TelegramModulesService
             
             if (ActionExecuted != null)
                 await ActionExecuted.InvokeAsync(null, context, Result.FromError(new UnknownCommand()));
+        }
+    }
+
+    private async Task CheckPreconditions(ModuleContext context, IServiceProvider provider)
+    {
+        foreach (var precondition in context.HandlerInfo!.Module.Type
+                     .GetCustomAttributes<PreconditionAttribute>()
+                     .Concat(context.HandlerInfo.MethodInfo.GetCustomAttributes<PreconditionAttribute>()))
+        {
+            var result = await precondition.CheckPreconditionAsync(context, provider);
+            if (!result.Success)
+            {
+                throw new UnmetPrecondition(precondition, result.ErrorReason!);
+            }
         }
     }
 
@@ -468,6 +486,7 @@ public class TelegramModulesService
                 Result result;
                 try
                 {
+                    await CheckPreconditions(context, scope.ServiceProvider);
                     await InvokeCallbackHandler(callbackQueryHandlerInfo, module, update.CallbackQuery.Data, scope.ServiceProvider);
                     result = Result.FromSuccess();
                 }

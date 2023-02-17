@@ -48,6 +48,7 @@ public class TelegramHandler: BackgroundService
                     : null,
                 BadArgs badArgs => _l["TooFewArguments"],
                 TypeConvertException typeConvert => _l["TypeConvertException", typeConvert.ErrorReason, typeConvert.Position + 1],
+                UnmetPrecondition unmetPrecondition => unmetPrecondition.Message,
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
@@ -65,6 +66,7 @@ public class TelegramHandler: BackgroundService
             var errorMessage = result.Exception switch
             {
                 UnknownCommand unknownCommand =>  _l["UnknownAction", context.CommandString],
+                UnmetPrecondition unmetPrecondition => unmetPrecondition.Message,
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
@@ -85,6 +87,7 @@ public class TelegramHandler: BackgroundService
                 TypeConvertException typeConvert => _l["TypeConvertException", typeConvert.ErrorReason, typeConvert.Position + 1],
                 ValidationError validation => _l["ValidationError", validation.Message, validation.Position + 1],
                 UnknownCommand => _l["UnknownState"],
+                UnmetPrecondition unmetPrecondition => unmetPrecondition.Message,
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
@@ -104,6 +107,7 @@ public class TelegramHandler: BackgroundService
                 UnknownCommand unknownCommand => $"Unknown callback query **{context.CommandString}**",
                 TypeConvertException typeConvert => _l["TypeConvertException", typeConvert.ErrorReason, typeConvert.Position + 1],
                 CallbackQueryHandlerBadPath badPath => $"Parameter {badPath.ParameterInfo.Name} not present in {badPath.Path}",
+                UnmetPrecondition unmetPrecondition => unmetPrecondition.Message,
                 BaseCommandException => result.Exception.Message,
                 _ => null
             };
