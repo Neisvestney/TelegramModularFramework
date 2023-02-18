@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>0.9.0</Version>
+        <Version>0.9.1</Version>
         <Authors>Neisvestney</Authors>
         <Description>Framework for writing telegram bots with Telegram.Bots library and modules</Description>
         <PackageTags>telegram;framework;net6.0;netstandard2.0;di;modules</PackageTags>

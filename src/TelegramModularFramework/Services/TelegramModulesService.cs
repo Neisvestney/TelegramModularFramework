@@ -699,7 +699,7 @@ public class TelegramModulesService
             {
                 Module = moduleInfo,
                 MethodInfo = m,
-                Name = groupName + "/" + m.GetCustomAttribute<CallbackQueryHandlerAttribute>()!.Path,
+                Name = groupName + groupName == "/" ? "" : "/" + m.GetCustomAttribute<CallbackQueryHandlerAttribute>()!.Path,
                 Summary = m.GetCustomAttribute<SummaryAttribute>()?.Summary ?? "",
                 RunMode = m.GetCustomAttribute<RunModeAttribute>()?.RunMode ?? RunMode.Sync,
                 Attributes = m.GetCustomAttribute<CallbackQueryHandlerAttribute>()!,
