@@ -15,7 +15,7 @@ public class UserLanguageCultureInfoUpdater : ICultureInfoUpdater
         var code = context.Update.Type switch
         {
             UpdateType.Message => context.Update.Message?.From?.LanguageCode,
-            UpdateType.CallbackQuery => context.Update.Message?.From?.LanguageCode,
+            UpdateType.CallbackQuery => context.Update.CallbackQuery?.From.LanguageCode,
             _ => null
         };
         return CultureInfo.GetCultureInfoByIetfLanguageTag(code ?? "en");
