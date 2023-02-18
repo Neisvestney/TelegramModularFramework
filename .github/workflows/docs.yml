@@ -18,7 +18,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.x.x'
+          dotnet-version: '7.0.101'
       - name: Restore NuGet
         run: dotnet restore 
       - name: Run DocFX
