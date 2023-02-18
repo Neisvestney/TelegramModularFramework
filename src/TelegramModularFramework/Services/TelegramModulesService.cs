@@ -814,7 +814,7 @@ public class TelegramModulesService
             throw new ArgumentException("Callback handler or state handler not found", nameof(handler));
         }
 
-        return PathUtils.InsertParametersIntoPath(module.Group + "/" + handlerInfo.Attributes.Path, parameters);
+        return PathUtils.InsertParametersIntoPath(module.Group + module.Group == "/" ? "" : "/" + handlerInfo.Attributes.Path, parameters);
     }
     
     public string UrlFor<TModule>(string handler, object? parameters = null) where TModule : TelegramModule => UrlFor(typeof(TModule), handler, parameters);
